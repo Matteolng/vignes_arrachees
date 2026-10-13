@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Vignes arrachées, Entre-deux-Mers</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Que deviennent les vignes arrachées ? Une méthode reproductible, fondée sur des images satellite et aériennes, testée sur 8 501 parcelles de l'Entre-deux-Mers (Gironde).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f2ea; --bg2:#efe8dc; --card:#fffdf8; --ink:#1f1a15; --muted:#6a6157; --line:#e3d9c9;
+  --vine:#6d2e46; --vine-soft:#f3e3ea; --leaf:#1d9873; --leaf-soft:#dff3ec; --violet:#6f66d6; --violet-soft:#eceafd;
+  --amber:#c98404; --amber-soft:#fbf0d9; --red:#d14b45; --red-soft:#fae3e1; --orange:#e0681b; --taupe:#857561; --mapbg:#f1ece2;
+  --shadow:0 1px 2px rgba(40,30,20,.06),0 8px 24px rgba(40,30,20,.06);
+  --r:14px; --mono:'JetBrains Mono',ui-monospace,monospace; --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14110e; --bg2:#1b1713; --card:#1f1a16; --ink:#f2ece3; --muted:#a89e91; --line:#342d26;
+    --vine:#e08aa8; --vine-soft:#3a2230; --leaf:#3cc79c; --leaf-soft:#173229; --violet:#9d96f0; --violet-soft:#26244a;
+    --amber:#f0b440; --amber-soft:#3a2c10; --red:#ff7b74; --red-soft:#3d1c1a; --orange:#f58a45; --taupe:#a8987f; --mapbg:#191512;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14110e; --bg2:#1b1713; --card:#1f1a16; --ink:#f2ece3; --muted:#a89e91; --line:#342d26;
+  --vine:#e08aa8; --vine-soft:#3a2230; --leaf:#3cc79c; --leaf-soft:#173229; --violet:#9d96f0; --violet-soft:#26244a;
+  --amber:#f0b440; --amber-soft:#3a2c10; --red:#ff7b74; --red-soft:#3d1c1a; --orange:#f58a45; --taupe:#a8987f; --mapbg:#191512;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--vine)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+h1,h2,h3{font-family:var(--serif);line-height:1.15;margin:0 0 .5em;letter-spacing:-.01em;text-wrap:balance}
+h2{font-size:clamp(28px,4vw,40px);font-weight:600}
+h3{font-size:21px;font-weight:600}
+h4{font:600 15px/1.3 var(--sans);margin:0 0 6px}
+p{margin:0 0 1em}
+.muted{color:var(--muted)} .mono{font-family:var(--mono)} .small{font-size:14px} .xs{font-size:12.5px}
+nav.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;align-items:center;gap:14px;height:56px}
+nav.top .brand{font-family:var(--serif);font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink)}
+nav.top .links{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1}
+nav.top .links::-webkit-scrollbar{display:none}
+nav.top .links a{font-size:14px;text-decoration:none;color:var(--muted);padding:6px 10px;border-radius:99px;white-space:nowrap}
+nav.top .links a.on{background:var(--vine-soft);color:var(--vine);font-weight:600}
+.themebtn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;width:34px;height:34px;cursor:pointer;flex:none;display:grid;place-items:center}
+.hero{position:relative;padding:56px 0 48px;overflow:hidden}
+.hero .rows{position:absolute;inset:0;opacity:.5;pointer-events:none;background:repeating-linear-gradient(115deg,transparent 0 18px,color-mix(in srgb,var(--leaf) 16%,transparent) 18px 22px);-webkit-mask-image:radial-gradient(ellipse at 90% 10%,#000 0,transparent 55%);mask-image:radial-gradient(ellipse at 90% 10%,#000 0,transparent 55%)}
+.eyebrow{font:600 12.5px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--leaf)}
+.hero h1{font-size:clamp(34px,5.6vw,64px);font-weight:700;max-width:900px;margin:14px 0 16px}
+h1 em,h2 em{font-style:italic;color:var(--vine)}
+.hero .lead{font-size:clamp(17px,2vw,20px);max-width:820px;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 0}
+.tag{font:500 13px/1 var(--sans);padding:7px 11px;border-radius:99px;background:var(--card);border:1px solid var(--line)}
+.author{margin-top:18px;font-size:14px;color:var(--muted)}
+section{padding:64px 0;border-top:1px solid var(--line)} section.alt{background:var(--bg2)}
+.sec-head{max-width:800px;margin-bottom:28px} .sec-head .eyebrow{display:block;margin-bottom:10px}
+.sub{margin-top:48px} .sub>.eyebrow{display:block;margin-bottom:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.grid2>*,.grid3>*,.grid4>*{min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);min-width:0}
+.callout{border-left:4px solid var(--leaf);background:var(--leaf-soft);padding:14px 16px;border-radius:0 10px 10px 0;margin:18px 0}
+.callout.vine{border-color:var(--vine);background:var(--vine-soft)} .callout.amber{border-color:var(--amber);background:var(--amber-soft)}
+.callout p:last-child,.card p:last-child{margin-bottom:0}
+.pill{display:inline-block;font:600 12px/1 var(--sans);padding:5px 9px;border-radius:99px}
+.pill.g{background:var(--leaf-soft);color:var(--leaf)} .pill.v{background:var(--violet-soft);color:var(--violet)} .pill.r{background:var(--vine-soft);color:var(--vine)} .pill.a{background:var(--amber-soft);color:var(--amber)}
+.src{font-size:12.5px;color:var(--muted);margin-top:10px}
+figure{margin:0} figure img{width:100%;height:auto;display:block;border-radius:10px;background:#fff;border:1px solid var(--line)}
+figcaption{font-size:13.5px;color:var(--muted);margin-top:8px}
+img.px{image-rendering:pixelated}
+button{font:inherit}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 13px;border-radius:99px;cursor:pointer;font-size:14px;font-weight:500;transition:.15s}
+.btn:hover{border-color:var(--vine)} .btn:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--vine);outline-offset:2px} .btn.on{background:var(--vine);border-color:var(--vine);color:#fff}
+:root[data-theme="dark"] .btn.on{color:#1a1014} @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.on{color:#1a1014}}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+input[type=range]{width:100%;accent-color:var(--vine)}
+label.ctl{display:block;font-size:13.5px;color:var(--muted);margin:10px 0 2px} label.ctl b{color:var(--ink);font-family:var(--mono);font-weight:600}
+.big{font:700 clamp(30px,4vw,44px)/1.05 var(--serif)} .big span{font-size:.5em;font-weight:600;color:var(--muted)}
+/* vidéo */
+.vbox{display:grid;grid-template-columns:minmax(0,430px) 1fr;gap:24px;align-items:start;margin-top:30px}
+.vbox video{width:100%;aspect-ratio:4/5;display:block;border-radius:14px;background:#efe8dc;border:1px solid var(--line);box-shadow:var(--shadow)}
+.vfail{aspect-ratio:4/5;border-radius:14px;border:1px dashed var(--line);background:var(--card);padding:24px;align-content:center;text-align:center;color:var(--muted)}
+.vfail{display:grid} .vfail[hidden]{display:none} .vfail b{color:var(--ink)}
+.chap{display:grid;gap:6px;margin:10px 0 0;padding:0;list-style:none}
+.chap button{width:100%;display:grid;grid-template-columns:52px 1fr;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:9px 12px;cursor:pointer;font-size:14.5px}
+.chap button:hover{border-color:var(--vine)} .chap button.on{border-color:var(--vine);background:var(--vine-soft)}
+.chap .t{font:600 13px var(--mono);color:var(--vine)}
+.answers{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+.answers .card{display:flex;flex-direction:column}
+.answers .q{font:600 13px/1.3 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.answers .big{margin:10px 0 6px;color:var(--vine)}
+.answers a.go{margin-top:auto;padding-top:10px;font-weight:600;font-size:14px;text-decoration:none}
+/* cas */
+.case svg{width:100%;height:auto;display:block;border-radius:10px;margin-bottom:12px} .case .verdict{font-size:14px;font-weight:600;margin-top:8px}
+.qcards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.qcard{display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:start;text-decoration:none;color:var(--ink)}
+.qcard .n{font:700 52px/1 var(--serif);color:var(--vine)}
+.qcard h3{margin:4px 0 6px}
+/* tableaux */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--card);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;background:var(--bg2)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dtab td:first-child{font-weight:600;min-width:150px}
+/* pipeline */
+.pipe{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:16px}
+.pipe button{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:12px 10px 10px;cursor:pointer;text-align:left;color:var(--ink);min-height:84px}
+.pipe button .n{font:600 11px var(--mono);color:var(--muted)} .pipe button .t{display:block;font-weight:600;font-size:14px;line-height:1.25;margin-top:6px}
+.pipe button.on{background:var(--vine);border-color:var(--vine);color:#fff} .pipe button.on .n{color:rgba(255,255,255,.85)}
+:root[data-theme="dark"] .pipe button.on{color:#1a1014} :root[data-theme="dark"] .pipe button.on .n{color:#1a1014}
+.stepbox{display:grid;grid-template-columns:1.35fr 1fr;gap:22px} .stepbox>*{min-width:0}
+.io{display:grid;gap:10px;align-content:start} .io div{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14.5px}
+.io div b{display:block;font:600 11.5px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--leaf);margin-bottom:2px}
+.stepbox ul{padding-left:18px;margin:8px 0} .stepbox li{margin-bottom:6px}
+.rules{display:grid;gap:6px;counter-reset:r;margin:10px 0;padding:0;list-style:none}
+.rules li{counter-increment:r;display:grid;grid-template-columns:26px 1fr;gap:10px;font-size:14px;align-items:start}
+.rules li::before{content:counter(r);width:24px;height:24px;border-radius:50%;background:var(--violet-soft);color:var(--violet);font:700 12px/24px var(--mono);text-align:center}
+/* entonnoir */
+.fun{display:grid;gap:22px}
+.frow .fh{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;margin-bottom:8px}
+.frow .fk{font:600 12px/1 var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--vine);background:var(--vine-soft);padding:5px 8px;border-radius:6px}
+.frow .fq{font-weight:600}
+.fbar{display:flex;gap:3px;height:58px}
+.fbar>div{border-radius:8px;color:#fff;display:flex;flex-direction:column;justify-content:center;padding:0 10px;overflow:hidden;min-width:0;white-space:nowrap}
+.fbar>div b{font-size:16px;line-height:1.1} .fbar>div span{font-size:12px;opacity:.92}
+.fbar>div.ghost{opacity:.18}
+.fbar>div.hid b,.fbar>div.hid span{visibility:hidden}
+.fleg{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:8px;font-size:13.5px;color:var(--muted)}
+.fleg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.fres{display:flex;gap:3px;margin-top:6px}
+.fres>div{border-top:4px solid;padding-top:8px;text-align:center;min-width:0}
+.fres b{display:block;font:700 clamp(18px,2.6vw,26px)/1.1 var(--serif)} .fres span{font-size:13.5px;color:var(--muted)}
+/* barres */
+.bars .b{display:grid;grid-template-columns:210px 1fr 76px;gap:10px;align-items:center;margin:8px 0;font-size:14px}
+.bars .b .t{display:flex;height:22px;background:var(--line);border-radius:6px;overflow:hidden}
+.bars .b .t i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--muted);margin-top:12px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.tps .row{display:grid;grid-template-columns:96px 1fr 70px;gap:10px;align-items:center;margin:7px 0;font-size:13.5px}
+.tps .bar{display:flex;height:26px;border-radius:6px;overflow:hidden;background:var(--line)}
+.tps .bar i{display:block;height:100%}
+.ej{display:grid;gap:6px}
+.ej button{display:grid;grid-template-columns:14px 240px 1fr 76px;gap:10px;align-items:center;border:0;background:none;color:var(--ink);text-align:left;padding:6px 8px;border-radius:8px;cursor:pointer;font-size:14px}
+.ej button:hover,.ej button.on{background:var(--bg2)}
+.ej button .sw{width:14px;height:14px;border-radius:3px} .ej button .t{height:14px;border-radius:4px} .ej button .h{font-family:var(--mono);font-size:13px;text-align:right}
+.statbar{display:grid;gap:6px;font-size:13px}
+.statbar .row{display:grid;grid-template-columns:200px 1fr 60px;gap:8px;align-items:center}
+.statbar .row.hl .lbl{font-weight:700;color:var(--ink)} .statbar .lbl{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.score{font:700 44px/1 var(--serif)}
+.verdict{display:inline-block;margin-top:6px;font-weight:700;padding:6px 10px;border-radius:8px}
+.verdict.ok{background:var(--violet-soft);color:var(--violet)} .verdict.no{background:var(--amber-soft);color:var(--amber)}
+.demo{display:grid;grid-template-columns:1fr 1fr 260px;gap:16px;align-items:start} .demo>*{min-width:0}
+.demo canvas{width:100%;aspect-ratio:1;display:block;border-radius:10px;border:1px solid var(--line);background:#000}
+.toplist{display:grid;gap:6px;max-height:640px;overflow:auto;padding-right:4px}
+.toplist button{display:grid;grid-template-columns:34px 1fr 64px;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 10px;cursor:pointer;font-size:13.5px}
+.toplist button:hover{border-color:var(--vine)}
+.toplist .rk{font:700 14px var(--mono);color:var(--vine)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.mat{display:grid;grid-template-columns:auto 1fr 1fr;gap:4px;font-size:13px;margin:10px 0}
+.mat div{padding:10px;border-radius:8px;text-align:center}
+.mat .h{color:var(--muted);font-weight:600;background:none;padding:4px}
+.mat .c{font:700 26px/1 var(--serif)}
+/* carte */
+.mapwrap{display:grid;grid-template-columns:1fr 360px;gap:16px;align-items:start}
+.mapwrap>*{min-width:0}
+.mapbox{position:relative;background:var(--mapbg);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;touch-action:none}
+#map{width:100%;height:620px;display:block;cursor:grab}
+#map.drag{cursor:grabbing}
+.mapctl{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px}
+.mapctl button{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;box-shadow:var(--shadow);display:grid;place-items:center}
+.maphint{position:absolute;left:10px;bottom:10px;font-size:12px;color:var(--muted);background:color-mix(in srgb,var(--card) 85%,transparent);padding:4px 8px;border-radius:8px}
+.maptools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.maptools input[type=search]{flex:1;min-width:200px;padding:9px 12px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:14px}
+.maplegend{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.maplegend button{display:flex;align-items:center;gap:6px;font-size:12.5px;padding:5px 9px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.maplegend button i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.maplegend button.off{opacity:.35}
+.fiche{position:sticky;top:72px;max-height:calc(100vh - 90px);overflow:auto}
+.fiche h3{margin-bottom:4px}
+.fiche .kv{display:grid;grid-template-columns:128px 1fr;gap:4px 10px;font-size:13.5px;margin:10px 0}
+.fiche .kv b{color:var(--muted);font-weight:500}
+.proj{display:grid;gap:6px;margin:8px 0}
+.proj .p{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px}
+.proj .p .hd{display:flex;justify-content:space-between;gap:8px;font-weight:600}
+.niv{font:600 11.5px/1 var(--sans);padding:4px 8px;border-radius:99px;white-space:nowrap}
+.n0{background:#d8f1e6;color:#0f6b4e} .n1{background:#e6f0d0;color:#4f6b14} .n2{background:#fbeccf;color:#8a5a00} .n3{background:#f6dcdc;color:#9a2b2b}
+.prio{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--line);margin:6px 0}
+.prio i{height:100%}
+/* usages */
+.ucard h3{color:var(--vine);margin-bottom:6px}
+.ucard ul{padding-left:18px;margin:8px 0 0;font-size:14.5px} .ucard li{margin-bottom:4px}
+.howto{counter-reset:h;list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.howto li{counter-increment:h;display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start}
+.howto li::before{content:counter(h);width:32px;height:32px;border-radius:50%;background:var(--leaf-soft);color:var(--leaf);font:700 14px/32px var(--mono);text-align:center}
+.lim li{margin-bottom:10px}
+pre{background:#1d1915;color:#efe7da;border-radius:12px;padding:16px;overflow-x:auto;font:13px/1.6 var(--mono);margin:0}
+pre .c{color:#9d927f} pre .k{color:#e8a0bc} pre .s{color:#a6d9a0}
+code{font-family:var(--mono);font-size:.9em;background:var(--bg2);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+.skills{display:flex;flex-wrap:wrap;gap:8px} .skills span{padding:8px 12px;border-radius:10px;background:var(--card);border:1px solid var(--line);font-size:14px} .skills span b{color:var(--vine)}
+ol.sources{padding-left:20px;font-size:14.5px} ol.sources li{margin-bottom:9px}
+footer{padding:34px 0 60px;color:var(--muted);font-size:13.5px;border-top:1px solid var(--line)}
+.reveal{transform:translateY(10px);transition:transform .7s ease} .reveal.in{transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{transform:none;transition:none} html{scroll-behavior:auto}}
+@media (max-width:960px){
+  .mapwrap{grid-template-columns:1fr} .fiche{position:static;max-height:none}
+  #map{height:480px}
+  .vbox{grid-template-columns:1fr} .vbox video,.vfail{max-width:430px}
+}
+@media (max-width:900px){
+  .grid2,.grid3,.stepbox,.answers,.qcards{grid-template-columns:1fr} .grid4{grid-template-columns:1fr 1fr}
+  .pipe{grid-template-columns:repeat(3,1fr)} .demo{grid-template-columns:1fr 1fr} .demo .ctrl{grid-column:1/-1}
+  .ej button{grid-template-columns:14px 160px 1fr 64px} .statbar .row{grid-template-columns:130px 1fr 56px}
+  .bars .b{grid-template-columns:150px 1fr 64px}
+}
+@media (max-width:520px){
+  .pipe{grid-template-columns:repeat(2,1fr)} .demo{grid-template-columns:1fr} .grid4{grid-template-columns:1fr}
+  .ej button{grid-template-columns:12px 1fr 64px} .ej button .t{display:none}
+  .tps .row{grid-template-columns:62px 1fr 62px;font-size:12px}
+  #map{height:420px}
+  .bars .b{grid-template-columns:110px 1fr 56px;font-size:13px}
+  .fbar{height:50px} .fbar>div{padding:0 6px} .fbar>div b{font-size:13px}
+  .fiche .kv{grid-template-columns:110px 1fr}
+}
+</style>
+</head>
+<body>
+<nav class="top">
+  <div class="wrap">
+    <a class="brand" href="#top"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="14" r="4" fill="var(--vine)"/><circle cx="15" cy="14" r="4" fill="var(--vine)" opacity=".75"/><circle cx="12" cy="9" r="4" fill="var(--vine)" opacity=".9"/><path d="M12 5c0-2 1-3 3-3" stroke="var(--leaf)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>Vignes arrachées</a>
+    <div class="links" id="navlinks">
+      <a href="#probleme">Problème</a><a href="#donnees">Données</a><a href="#methode">Méthode</a><a href="#resultats">Résultats</a><a href="#carte">Carte</a><a href="#fiabilite">Limites</a><a href="#usages">Usages</a><a href="#code">Code</a>
+    </div>
+    <button class="themebtn" id="theme" aria-label="Changer de thème"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="rows"></div>
+  <div class="wrap">
+    <span class="eyebrow">Étude de cas · Entre-deux-Mers, Gironde · données ouvertes</span>
+    <h1>Que deviennent les vignes <em>arrachées</em>&nbsp;?</h1>
+    <p class="lead">En Gironde, environ 21&nbsp;000&nbsp;ha de vignes ont été arrachés d'août 2023 à mai 2026. Or un tiers des anciennes parcelles de vigne ne sont plus déclarées du tout à la PAC&nbsp;: on ne sait plus si elles ont été arrachées, ni ce qu'elles sont devenues. Ce projet propose une méthode reproductible, fondée sur des images satellite et aériennes, pour répondre parcelle par parcelle et aider à décider quoi en faire.</p>
+    <div class="tags"><span class="tag">Sentinel-2</span><span class="tag">Orthophoto IGN 20&nbsp;cm</span><span class="tag">Transformée de Fourier</span><span class="tag">Apprentissage automatique</span><span class="tag">Validation indépendante (DDTM)</span><span class="tag">Python, QGIS</span></div>
+
+    <div class="vbox" id="video">
+      <div>
+        <video id="vid" controls playsinline preload="metadata" poster="videos/vignes_arrachees.jpg"><source id="vsrc" src="videos/vignes_arrachees.mp4" type="video/mp4"></video>
+        <div class="vfail" id="vfail" hidden><p><b>La vidéo n'a pas pu se charger.</b></p><p class="small" id="vfailtxt">Fichier absent ou format non lu par ce navigateur. Le fichier <code>videos/vignes_arrachees.mp4</code> doit se trouver dans un dossier <code>videos</code> à côté de cette page. Le reste du site fonctionne sans elle.</p></div>
+      </div>
+      <div>
+        <span class="eyebrow">La vidéo, en 5 minutes et sans son</span>
+        <p class="small muted" style="margin:8px 0 4px">Elle suit exactement le plan de cette page. Clique sur un chapitre pour y aller.</p>
+        <ul class="chap" id="chap"></ul>
+      </div>
+    </div>
+
+    <div class="answers" id="answers"></div>
+    <p class="author">Projet de Matteo Lannelongue, ingénieur agronome (ENSAT, Master SIGMA). Chiffres issus de l'exécution du pipeline du 12 octobre 2026.</p>
+  </div>
+</header>
+
+<!-- 01 PROBLEME -->
+<section id="probleme">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">01 · Le problème</span>
+      <h2>Un angle mort&nbsp;: les vignes qui <em>sortent des déclarations</em></h2>
+      <p>La crise du vignoble bordelais a conduit à des arrachages massifs, aidés ou non. Les aides imposent ensuite de renaturer ou de diversifier les parcelles, et collectivités, conseillers et opérateurs fonciers cherchent à savoir où sont ces terres et ce qu'elles deviennent. La source ouverte la plus complète, le Registre parcellaire graphique (RPG) des déclarations PAC, n'y répond qu'en partie.</p>
+    </div>
+    <div class="grid3 reveal">
+      <div class="card"><div class="big">≈ 21&nbsp;000 <span>ha</span></div><p class="small" style="margin-top:8px">de vignes arrachés en Gironde d'août 2023 à mai 2026&nbsp;: 12&nbsp;284&nbsp;ha avec une aide publique, environ 8&nbsp;700&nbsp;ha sans aide.</p><p class="src">Agreste Nouvelle-Aquitaine, <i>Essentiel</i> n°80, juin 2026.</p></div>
+      <div class="card"><div class="big" style="color:var(--vine)">34,9&nbsp;<span>%</span></div><p class="small" style="margin-top:8px">des parcelles déclarées en vigne en 2022 ne sont plus déclarées du tout à la PAC en 2025. 53,5&nbsp;% sont toujours en vigne, 11,6&nbsp;% déclarées autre chose.</p><p class="src">Agreste Nouvelle-Aquitaine, <i>Essentiel</i> n°80, juin 2026 (données PAC 2025).</p></div>
+      <div class="card"><div class="big">≈ 4&nbsp;400 <span>ha</span></div><p class="small" style="margin-top:8px">proposés à la Foncière d'avenir en Gironde (430 dossiers, plus de 6&nbsp;500 parcelles), qui cherche à identifier le foncier libéré par l'arrachage. Les friches viticoles font partie des premiers critères retenus.</p><p class="src">Préfecture de Nouvelle-Aquitaine, 19 juin 2026&nbsp;; R. Lecocq, Pleinchamp, 15 juillet 2026.</p></div>
+    </div>
+
+    <h3 class="reveal" style="margin-top:44px">Une parcelle sortie de la vigne dans la PAC peut cacher trois réalités</h3>
+    <div class="grid3 reveal">
+      <div class="card case">
+        <svg viewBox="0 0 300 150" role="img" aria-label="Parcelle déclarée en prairie"><rect width="300" height="150" fill="#9fc06f"/><g fill="#86ab55" opacity=".8"><circle cx="40" cy="30" r="14"/><circle cx="120" cy="90" r="22"/><circle cx="230" cy="50" r="18"/><circle cx="260" cy="120" r="16"/></g><rect x="10" y="10" width="110" height="26" rx="6" fill="#fff" opacity=".92"/><text x="18" y="28" font-family="Inter" font-size="13" font-weight="600" fill="#1f1a15">PAC : prairie</text></svg>
+        <span class="pill g">Cas 1</span><h3 style="margin-top:8px">Reconvertie et déclarée</h3>
+        <p class="small muted">Jachère, prairie, culture&nbsp;: la déclaration PAC dit ce qu'elle est devenue.</p><div class="verdict" style="background:var(--leaf-soft);color:var(--leaf)">Devenir connu</div>
+      </div>
+      <div class="card case">
+        <svg viewBox="0 0 300 150" role="img" aria-label="Parcelle non déclarée avec rangs de vigne"><rect width="300" height="150" fill="#d8c9a3"/><g stroke="#3f5a2b" stroke-width="7" stroke-linecap="round" stroke-dasharray="26 6"><line x1="-20" y1="20" x2="320" y2="-20"/><line x1="-20" y1="42" x2="320" y2="2"/><line x1="-20" y1="64" x2="320" y2="24"/><line x1="-20" y1="86" x2="320" y2="46"/><line x1="-20" y1="108" x2="320" y2="68"/><line x1="-20" y1="130" x2="320" y2="90"/><line x1="-20" y1="152" x2="320" y2="112"/><line x1="-20" y1="174" x2="320" y2="134"/><line x1="-20" y1="196" x2="320" y2="156"/></g><rect x="10" y="10" width="150" height="26" rx="6" fill="#fff" opacity=".92"/><text x="18" y="28" font-family="Inter" font-size="13" font-weight="600" fill="#1f1a15">PAC : non déclarée</text></svg>
+        <span class="pill v">Cas 2</span><h3 style="margin-top:8px">Toujours en vigne</h3>
+        <p class="small muted">Plus de demande d'aide, changement d'exploitant&nbsp;: la vigne est toujours là. La compter comme arrachée enverrait sur le terrain pour rien.</p><div class="verdict ok">Fausse piste à écarter</div>
+      </div>
+      <div class="card case">
+        <svg viewBox="0 0 300 150" role="img" aria-label="Parcelle non déclarée en friche"><rect width="300" height="150" fill="#b9ad7e"/><g fill="#4c6a33"><circle cx="50" cy="40" r="11"/><circle cx="66" cy="50" r="8"/><circle cx="180" cy="100" r="14"/><circle cx="200" cy="92" r="9"/><circle cx="250" cy="40" r="10"/><circle cx="110" cy="120" r="7"/><circle cx="140" cy="60" r="6"/></g><rect x="10" y="10" width="150" height="26" rx="6" fill="#fff" opacity=".92"/><text x="18" y="28" font-family="Inter" font-size="13" font-weight="600" fill="#1f1a15">PAC : non déclarée</text></svg>
+        <span class="pill r">Cas 3</span><h3 style="margin-top:8px">Arrachée, plus rien de déclaré</h3>
+        <p class="small muted">Entretenue, en friche, en train de se boiser&nbsp;? La PAC ne dit plus rien. C'est l'angle mort que l'outil éclaire.</p><div class="verdict" style="background:var(--red-soft);color:var(--red)">Devenir à découvrir</div>
+      </div>
+    </div>
+
+    <h3 class="reveal" style="margin-top:44px">Trois questions pour décider</h3>
+    <div class="qcards reveal">
+      <a class="card qcard" href="#r1"><span class="n">1</span><span><h3>Lesquelles sont vraiment arrachées&nbsp;?</h3><span class="small muted">Écarter les vignes simplement plus déclarées.</span></span></a>
+      <a class="card qcard" href="#r2"><span class="n">2</span><span><h3>Que sont-elles devenues&nbsp;?</h3><span class="small muted">Jachère, prairie, culture, parcelle entretenue ou friche.</span></span></a>
+      <a class="card qcard" href="#r3"><span class="n">3</span><span><h3>Qu'en faire, et par où commencer&nbsp;?</h3><span class="small muted">Enjeux de biodiversité, projets réalistes, priorités.</span></span></a>
+    </div>
+
+    <div class="grid2 reveal" style="margin-top:44px;align-items:center">
+      <div>
+        <h3>La zone d'étude</h3>
+        <p class="small">Un carré de 40&nbsp;km de côté (1&nbsp;600&nbsp;km²), centré sur l'Entre-deux-Mers (0,20° ouest, 44,75° nord). Il déborde sur le Libournais au nord de la Dordogne et sur les Graves à l'ouest de la Garonne. Le calcul tourne sur 81 dalles de 5&nbsp;km, traitées une par une.</p>
+        <p class="small"><b id="zonetxt"></b></p>
+        <p class="small muted">La méthode s'applique à une autre zone en changeant son centre et sa taille&nbsp;: rien n'est propre à ce carré.</p>
+      </div>
+      <figure style="max-width:520px;justify-self:center"><img class="px" src="img/occupation.webp" alt="Carte d'occupation du sol à 10 m de la zone d'étude" loading="lazy"><figcaption>La zone vue par le modèle Sentinel-2&nbsp;: forêt (vert foncé), vignes et vergers (violet), prairies (vert clair), cultures (jaune), eau (bleu), bâti (rouge). Carte produite par le pipeline.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 02 DONNEES -->
+<section id="donnees" class="alt">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">02 · Les données</span>
+      <h2>Uniquement des <em>données ouvertes</em>, croisées parcelle par parcelle</h2>
+      <p>Le script télécharge tout seul chaque source (services de l'IGN, catalogue d'images Sentinel-2, API naturalistes, Géorisques). Les contrôles sont faits par photo-interprétation, pas sur le terrain.</p>
+    </div>
+    <div class="tablewrap reveal">
+      <table class="dtab">
+        <thead><tr><th>Donnée</th><th>Producteur</th><th>Résolution, dates</th><th>Rôle dans l'outil</th></tr></thead>
+        <tbody>
+          <tr><td>Registre parcellaire graphique (RPG)</td><td>IGN, ASP</td><td>Parcelles déclarées, 2018 à 2024</td><td>Repérer les parcelles déclarées en vigne puis plus en vigne&nbsp;; lire ce qui est déclaré à la place.</td></tr>
+          <tr><td>Sentinel-2 L2A</td><td>Copernicus, via Microsoft Planetary Computer</td><td>10&nbsp;m, 10 bandes, 2023 à 2025&nbsp;; scènes à moins de 70&nbsp;% de nuages&nbsp;; environ <span id="obs"></span> observations sans nuage par pixel</td><td>Carte d'occupation du sol, fauches, sol nu, évolution du NDVI.</td></tr>
+          <tr><td>BD ORTHO</td><td>IGN</td><td>20&nbsp;cm (lue à 25&nbsp;cm par pixel), prise de vue du 11 mai 2024</td><td>Voir les rangs de vigne.</td></tr>
+          <tr><td>BD TOPO, BD Forêt, OCS GE</td><td>IGN</td><td>Vecteur</td><td>Exemples d'apprentissage du modèle (forêt, eau, bâti, cultures), distance à la forêt.</td></tr>
+          <tr><td>Zonages et milieux</td><td>INPN (PatriNat), IGN</td><td>ZNIEFF 1 et 2, Natura 2000, arrêtés de biotope, réserves, zones humides et prairies sensibles BCAE, haies</td><td>Indice écologique et enjeu principal.</td></tr>
+          <tr><td>Espèces observées</td><td>GBIF, OpenObs (MNHN)</td><td>Mailles de 2&nbsp;km, observations de 2000 à 2026&nbsp;; espèces quasi menacées à en danger critique (UICN)</td><td>Composante «&nbsp;espèces menacées&nbsp;» de l'indice.</td></tr>
+          <tr><td>Eau, sols, risques</td><td>BD TOPO, carte des sols INRAE, SoilGrids (ISRIC), Géorisques</td><td>Cours d'eau, hydromorphie, pH et carbone modélisés, zones inondables, argiles, cavités</td><td>Contraintes des projets, analyses de sol conseillées.</td></tr>
+          <tr><td>Urbanisme</td><td>Géoportail de l'urbanisme</td><td>Zonage des PLU, servitudes</td><td>Contexte réglementaire dans chaque fiche.</td></tr>
+          <tr><td>Contrôles à l'œil</td><td>Photo-interprétation</td><td>138 parcelles sur l'orthophoto de mai 2024, 131 sur des images de 2026</td><td>Caler le modèle, corriger l'estimation de surface.</td></tr>
+          <tr><td>Arrachage sanitaire, 1re vague</td><td>DDTM de la Gironde (data.gouv.fr)</td><td>Parcelles cadastrales, demandes de fin 2023, Licence Ouverte 2.0</td><td>Validation indépendante.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid2" style="margin-top:20px">
+      <figure class="card reveal"><img src="img/dalle.webp" alt="Six variables Sentinel-2 sur une dalle de 5 km" loading="lazy"><figcaption>Une dalle de 5&nbsp;km vue par Sentinel-2&nbsp;: couleurs naturelles, NDVI d'été, part du temps en sol nu, fauches, tendance du NDVI, années depuis la dernière gestion. Six des 108 variables du modèle.</figcaption></figure>
+      <figure class="card reveal"><img src="img/ortho_extrait.webp" alt="Extrait réel de l'orthophoto puis le même extrait en pixels de 10 m" loading="lazy"><figcaption>À gauche, un extrait réel de l'orthophoto IGN de mai 2024 (340&nbsp;m de côté, réduit)&nbsp;: une vigne striée de rangs en haut à droite, une parcelle arrachée devenue jachère dans le contour jaune. À droite, le même extrait moyenné en pixels de 10&nbsp;m, la résolution de Sentinel-2&nbsp;: les rangs disparaissent.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 03 METHODE -->
+<section id="methode">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">03 · La méthode</span>
+      <h2>Cinq étapes, avec des <em>règles explicites</em></h2>
+      <p>Après le point de départ (repérer les parcelles sorties de la vigne), cinq étapes, numérotées comme dans la vidéo. Chacune écrit ses résultats sur le disque, se relance seule et se vérifie. Clique sur une étape pour le détail&nbsp;: ce qu'elle fait, avec quels paramètres, et pourquoi.</p>
+    </div>
+    <div class="pipe reveal" id="pipe"></div>
+    <div class="card stepbox reveal" id="stepbox"></div>
+
+    <div class="sub reveal" id="demo">
+      <span class="eyebrow">Étape 3 en pratique</span>
+      <h3>Essayer le score de rangs</h3>
+      <p class="small muted" style="max-width:820px">La démo refait le calcul du script en direct sur une image simulée de 64&nbsp;m de côté. Des rangs réguliers donnent un point lumineux dans le spectre (à droite)&nbsp;: plus il est net par rapport au bruit voisin, plus le score monte. Joue avec les réglages.</p>
+      <div class="card">
+        <div class="btns" id="presets" style="margin-bottom:12px"></div>
+        <div class="demo">
+          <div><canvas id="cimg" width="256" height="256"></canvas><p class="xs muted" style="margin-top:6px">Image simulée, 64 × 64&nbsp;m</p></div>
+          <div><canvas id="cfft" width="256" height="256"></canvas><p class="xs muted" style="margin-top:6px">Spectre. Anneaux&nbsp;: périodes de 4&nbsp;m et 1&nbsp;m. Cercle vert&nbsp;: pic retenu.</p></div>
+          <div class="ctrl">
+            <div class="small muted">Score de rangs</div><div class="score" id="sval">…</div><div class="verdict" id="sverd">…</div>
+            <p class="small muted" id="sinfo" style="margin-top:8px"></p>
+            <label class="ctl">Écartement des rangs <b id="lp">2,0 m</b></label><input type="range" id="rp" min="1.4" max="3.2" step="0.1" value="2">
+            <label class="ctl">Orientation <b id="la">30°</b></label><input type="range" id="ra" min="0" max="175" step="5" value="30">
+            <label class="ctl">Contraste du feuillage <b id="lc">1,0</b></label><input type="range" id="rc" min="0.1" max="1.2" step="0.05" value="1">
+            <label class="ctl">Bruit, ombres <b id="lb">0,5</b></label><input type="range" id="rb" min="0" max="2" step="0.1" value="0.5">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub reveal" id="regles">
+      <span class="eyebrow">Étape 5 en détail</span>
+      <h3>Les règles de qualification</h3>
+      <p class="small muted" style="max-width:820px">Ce sont des règles expertes, écrites dans le script avec leurs seuils. Elles ne sont pas calibrées sur des données de terrain&nbsp;: elles servent à ouvrir la discussion, à valider avec des conseillers.</p>
+      <div class="tabs" id="rtabs"></div>
+      <div id="rbox"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 RESULTATS -->
+<section id="resultats" class="alt">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">04 · Les résultats</span>
+      <h2>Les réponses aux <em>trois questions</em></h2>
+      <p id="restxt"></p>
+    </div>
+
+    <div class="reveal" id="r1">
+      <span class="eyebrow">Question 1</span>
+      <h3 style="font-size:26px;margin-top:8px">Lesquelles sont vraiment arrachées&nbsp;?</h3>
+      <p class="small muted" style="max-width:820px">L'entonnoir suit les étapes de la méthode. Chaque barre représente toute la surface sortie de la vigne PAC, découpée un peu plus finement à chaque étape.</p>
+      <div class="card"><div class="fun" id="fun"></div><p class="xs muted" style="margin:14px 0 0">Hectares arrondis à l'unité&nbsp;: une somme d'arrondis peut différer d'un hectare du total.</p></div>
+      <div class="grid2" style="margin-top:20px">
+        <div class="card"><h3>Ce que la carte compte, et ce qu'on estime</h3><p class="small" id="esttxt"></p></div>
+        <div class="card"><h3>Pourquoi tant de vignes «&nbsp;disparues&nbsp;» sont encore là</h3><p class="small" id="whytxt" data-t="1">Une parcelle peut sortir de la vigne dans la PAC sans être arrachée, par exemple si elle n'est simplement plus déclarée. L'outil ne dit pas pourquoi&nbsp;: il constate que, sur l'orthophoto de mai 2024, ces parcelles ont des rangs nets ou un signal de culture pérenne. Sans ce tri, plus de la moitié des parcelles d'une liste «&nbsp;vignes arrachées&nbsp;» tirée de la PAC seraient de fausses pistes (<span id="whyn"></span>).</p></div>
+      </div>
+    </div>
+
+    <div class="reveal sub" id="r2">
+      <span class="eyebrow">Question 2</span>
+      <h3 style="font-size:26px;margin-top:8px">Que sont-elles devenues&nbsp;?</h3>
+      <div class="grid2">
+        <div class="card"><h3 id="devtitle"></h3><div class="bars" id="dev"></div><p class="xs muted" id="devnote" style="margin:10px 0 0"></p></div>
+        <div class="card tps"><h3>Avec le temps, les parcelles sortent de la PAC</h3><p class="small muted">Devenir de la surface arrachée selon le nombre d'années depuis la dernière vigne déclarée (état lu en 2024).</p><div id="tps"></div><div class="legend" id="tpsleg"></div></div>
+      </div>
+      <div class="card" style="margin-top:20px"><ul class="small" id="tpstxt" style="padding-left:18px;margin:0"></ul></div>
+    </div>
+
+    <div class="reveal sub" id="r3">
+      <span class="eyebrow">Question 3</span>
+      <h3 style="font-size:26px;margin-top:8px">Qu'en faire, et par où commencer&nbsp;?</h3>
+      <p class="small muted" style="max-width:820px">Trois lectures complémentaires&nbsp;: ce qu'il faut préserver, ce qui est réaliste sur le terrain, et où agir d'abord.</p>
+      <div class="card">
+        <h3 id="ejtitle"></h3>
+        <p class="small muted">Clique sur une ligne pour voir la règle exacte.</p>
+        <div class="ej" id="ej"></div>
+        <div class="callout" id="ejdef" style="margin-bottom:0"></div>
+      </div>
+      <div class="tabs" id="biotabs" style="margin-top:16px"></div>
+      <figure class="card" id="biofig"></figure>
+      <div class="grid2" style="margin-top:20px">
+        <div class="card"><h3>Ce qui est réaliste, par famille de projets</h3><div class="bars" id="proj"></div><div class="legend" id="projleg"></div></div>
+        <div class="card"><h3>Ce qu'il faut retenir</h3><ul class="small" id="projtxt" style="padding-left:18px"></ul><div class="callout amber" style="margin-bottom:0"><p class="small"><b>Avant tout projet sur une ancienne vigne</b>, chaque fiche conseille des analyses de sol, dont le <b>cuivre</b> hérité des traitements, et un sondage à la tarière pour l'hydromorphie.</p></div></div>
+      </div>
+      <figure class="card" style="margin-top:20px"><img src="img/freins.webp" alt="Ce qui bloque chaque famille de projets" loading="lazy"><figcaption>Ce qui bloque, par famille de projets. En vert, les freins qu'on peut lever&nbsp;: une parcelle trop petite se regroupe avec ses voisines, un sol hydromorphe (gorgé d'eau une partie de l'année) se draine, un point d'eau trop loin se compense par l'irrigation. En gris, les freins difficiles à lever&nbsp;: pente forte, sol engorgé en permanence, zone inondable. Une parcelle peut cumuler plusieurs freins.</figcaption></figure>
+      <div class="grid2" style="margin-top:20px">
+        <div class="card"><h3>Les 20 parcelles à regarder en premier</h3><p class="small muted">Score sur 100&nbsp;: grande surface 35&nbsp;%, enjeu écologique 25&nbsp;%, années sans gestion 25&nbsp;%, regroupable avec ses voisines 15&nbsp;%. Clique pour voir la parcelle sur la carte.</p><div class="toplist" id="toplst"></div></div>
+        <div>
+          <figure class="card"><img src="img/blocs.webp" alt="Concentration de la surface et blocs regroupables" loading="lazy"><figcaption>À gauche&nbsp;: la moitié des parcelles concentre 80&nbsp;% de la surface arrachée. À droite&nbsp;: les blocs de parcelles distantes de moins de 100&nbsp;m, utiles pour monter un projet à l'échelle d'un îlot.</figcaption></figure>
+          <figure class="card" style="margin-top:20px"><img src="img/dynamique.webp" alt="Arrachages par commune et par année" loading="lazy"><figcaption>Arrachages par commune et par année (première année sans vigne déclarée), et devenir selon l'ancienneté.</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CARTE -->
+<section id="carte">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">04 · Les résultats, parcelle par parcelle</span>
+      <h2>Explorer la carte</h2>
+      <p>Cherche une commune, change de lecture, clique sur une parcelle pour ouvrir sa fiche&nbsp;: ce qu'elle est devenue, son enjeu de biodiversité, les projets possibles et leurs raisons, sa priorité.</p>
+    </div>
+    <div class="maptools reveal">
+      <input type="search" id="q" list="communes" placeholder="Chercher une commune (Targon, Créon, Saint-Émilion…)" aria-label="Chercher une commune"><datalist id="communes"></datalist>
+      <div class="btns" id="layers"><button class="btn on" data-l="dev">Devenir</button><button class="btn" data-l="enj">Biodiversité</button><button class="btn" data-l="prio">Priorité</button></div>
+    </div>
+    <div class="mapwrap reveal">
+      <div>
+        <div class="mapbox"><canvas id="map"></canvas>
+          <div class="mapctl">
+            <button id="zin" aria-label="Zoomer"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+            <button id="zout" aria-label="Dézoomer"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+            <button id="zfit" aria-label="Vue entière"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg></button>
+          </div>
+          <div class="maphint">Glisser pour déplacer · molette ou boutons pour zoomer · clic pour la fiche</div>
+        </div>
+        <div class="maplegend" id="mleg"></div>
+      </div>
+      <aside class="card fiche" id="fiche"></aside>
+    </div>
+  </div>
+</section>
+
+<!-- 05 FIABILITE -->
+<section id="fiabilite" class="alt">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">05 · Fiabilité et limites</span>
+      <h2>Peut-on s'y fier&nbsp;? <em>Deux contrôles</em>, des limites mesurées</h2>
+      <p>Une liste de parcelles n'est utile que si l'on sait à quel point s'y fier. Premier contrôle&nbsp;: comparer l'outil à mon œil, sur les mêmes images. Second contrôle&nbsp;: le confronter à des arrachages connus par ailleurs.</p>
+    </div>
+    <div class="grid2 reveal">
+      <div class="card">
+        <h3>1. Contrôle à l'œil, à deux dates</h3>
+        <p class="small">Sur un échantillon de parcelles, je note ce que montre l'image (vigne ou arrachée) et je compare au verdict de l'outil.</p>
+        <div class="grid2" id="mats" style="gap:14px"></div>
+        <p class="small" id="valtxt"></p>
+      </div>
+      <div class="card">
+        <h3>Comment on estime la surface sans croire la carte sur parole</h3>
+        <p class="small">Méthode d'Olofsson et al. (2014), standard en télédétection&nbsp;: les parcelles candidates sont rangées en 4 cases (rangs détectés ou non, signal pérenne du satellite ou non). Dans chaque case, la part réellement arrachée mesurée sur les vérifications est appliquée à toute la surface de la case. Les erreurs de l'outil sont ainsi corrigées. La marge vient d'un <b>bootstrap</b>&nbsp;: le calcul est refait 2&nbsp;000 fois en rééchantillonnant les parcelles vérifiées, et on garde les 95&nbsp;% de résultats du milieu.</p>
+        <figure><img src="img/validation.webp" alt="Matrices de confusion et estimation de surface" loading="lazy"><figcaption>Figure produite par le pipeline.</figcaption></figure>
+      </div>
+    </div>
+    <figure class="card reveal" style="margin-top:20px"><img src="img/avant_apres.webp" alt="Trois parcelles types vues à quatre dates" loading="lazy"><figcaption>À quoi ressemble un contrôle à l'œil&nbsp;: trois parcelles types, dans l'ordre des dates (SPOT 2023, SPOT 2024, orthophoto de mai 2024, SPOT 2025). Ligne 1&nbsp;: arrachée, devenue jachère. Ligne 2&nbsp;: sortie du dernier RPG, rangs encore nets. Ligne 3&nbsp;: plus déclarée mais toujours en vigne. Imagerie IGN.</figcaption></figure>
+    <div class="card reveal" style="margin-top:20px">
+      <h3>2. Test indépendant&nbsp;: les arrachages sanitaires de la DDTM</h3>
+      <p class="small">La DDTM de la Gironde publie les parcelles cadastrales arrachées avec l'aide sanitaire (première vague, demandes du 20 novembre au 20 décembre 2023, pour lutter contre la flavescence dorée). Ce sont des arrachages certains, recensés sans l'outil. On regarde ce que l'outil en dit.</p>
+      <figure><img src="img/ddtm.webp" alt="Répartition des surfaces DDTM selon le verdict de l'outil" loading="lazy"></figure>
+      <div class="grid3" style="margin-top:16px" id="ddtmk"></div>
+      <div class="tablewrap" style="margin-top:16px"><table><thead><tr><th>Catégorie</th><th class="num">ha</th><th>Lecture</th></tr></thead><tbody id="ddtmtab"></tbody></table></div>
+    </div>
+    <div class="grid2 reveal" style="margin-top:20px">
+      <div class="card"><h3>Ce que l'outil fait bien</h3><ul class="small lim" id="okl"></ul></div>
+      <div class="card"><h3>Ses limites, mesurées</h3><ul class="small lim" id="kol"></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 USAGES -->
+<section id="usages">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">06 · À quoi ça sert</span>
+      <h2>Une <em>aide à la décision</em>, pas un verdict</h2>
+      <p>L'outil ne décide pas à la place des gens. Il dit où regarder, ce qui est probable, ce qui bloque et ce qui reste à vérifier.</p>
+    </div>
+    <div class="grid2 reveal">
+      <div class="card ucard"><h3>Conseillers agricoles</h3><p class="small muted">Chambre d'agriculture, bureaux d'études</p><ul><li>Préparer un diagnostic de diversification avec la fiche de la parcelle&nbsp;: pente, sol, eau, freins.</li><li>Repérer les îlots regroupables pour un projet collectif (élevage, maraîchage).</li></ul></div>
+      <div class="card ucard"><h3>Collectivités</h3><p class="small muted">Communes, intercommunalités</p><ul><li>Suivre les parcelles sans entretien et les friches viticoles de leur territoire.</li><li>Nourrir un PLU ou une stratégie foncière avec une carte mise à jour chaque année.</li></ul></div>
+      <div class="card ucard"><h3>Opérateurs fonciers</h3><p class="small muted">SAFER, Foncière d'avenir en Gironde</p><ul><li>Repérer le foncier libéré par l'arrachage, y compris celui qui ne figure plus à la PAC.</li><li>Écarter d'emblée les vignes encore en place.</li></ul></div>
+      <div class="card ucard"><h3>Naturalistes</h3><p class="small muted">Conservatoires, associations, gestionnaires d'espaces</p><ul><li>Cibler les parcelles à enjeu&nbsp;: zones humides, lisières forestières, végétation spontanée qui s'installe.</li><li>Prioriser les visites de terrain.</li></ul></div>
+    </div>
+    <div class="grid2" style="margin-top:20px">
+      <div class="card reveal"><h3>Comment s'en servir</h3>
+        <ol class="howto small">
+          <li><span><b>Ouvrir la carte</b> et chercher sa commune.</span></li>
+          <li><span><b>Lire la fiche</b> de chaque parcelle&nbsp;: devenir, enjeu, projets possibles et leurs raisons, priorité.</span></li>
+          <li><span><b>Exporter</b>&nbsp;: tableau des priorités en CSV, couche QGIS avec toutes les colonnes.</span></li>
+          <li><span><b>Vérifier sur le terrain</b> et en parler avec les exploitants avant toute décision.</span></li>
+          <li><span><b>Mettre à jour</b> chaque année&nbsp;: nouveau RPG, nouvelles images, puis relancer le notebook.</span></li>
+        </ol>
+      </div>
+      <div class="card reveal"><h3>Pour aller plus loin</h3>
+        <ul class="small lim">
+          <li><b>Voir les arrachages partiels</b>&nbsp;: mesurer les rangs par fenêtres de 30&nbsp;m à l'intérieur de chaque parcelle, plutôt que sur la parcelle entière.</li>
+          <li><b>Estimer par points</b>&nbsp;: un échantillon de points plutôt que de parcelles, pour corriger aussi les arrachages partiels.</li>
+          <li><b>Suivre dans le temps</b>&nbsp;: refaire la lecture des rangs sur chaque nouvelle orthophoto.</li>
+          <li><b>Valider les règles</b> de projets et d'enjeux avec des conseillers et des naturalistes, puis les recalibrer.</li>
+          <li><b>Étendre</b> à toute la Gironde&nbsp;: le script fonctionne aussi par département.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANNEXE CODE -->
+<section id="code" class="alt">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Annexe · Le code</span>
+      <h2>Sous le capot</h2>
+      <p>Un seul fichier Python, <code>script_vignes_arrachees.py</code> (7&nbsp;795 lignes, 256 fonctions), et un notebook commenté qui l'appelle étape par étape. Conçu pour Onyxia (SSP Cloud)&nbsp;: il installe ses bibliothèques, reprend là où il s'est arrêté et s'applique à une autre zone en changeant deux paramètres.</p>
+    </div>
+    <div class="tablewrap reveal">
+      <table>
+        <thead><tr><th>Étape</th><th>Fonction</th><th>Ce qu'elle fait</th><th>Ce qu'elle écrit</th></tr></thead>
+        <tbody>
+          <tr><td>1. Zone</td><td class="mono xs">etape_zone</td><td>Carré d'étude découpé en 81 dalles de 5&nbsp;km, traitées une par une</td><td class="mono xs">0_zone/</td></tr>
+          <tr><td>2. Bases</td><td class="mono xs">etape_bd</td><td>Télécharge RPG 2018 à 2024, BD TOPO, BD Forêt, OCS GE, zonages, sols, risques, haies, PLU</td><td class="mono xs">1_references/</td></tr>
+          <tr><td>3. Sentinel-2</td><td class="mono xs">etape_s2</td><td>Cherche les images 2023 à 2025 (catalogue STAC) et calcule par pixel composites saisonniers, indices, séries, fauches</td><td class="mono xs">2_sentinel2/</td></tr>
+          <tr><td>4. Exemples</td><td class="mono xs">etape_etiquettes</td><td>Transforme les bases en exemples d'apprentissage (9 classes), en érodant les bords</td><td class="mono xs">3_apprentissage/</td></tr>
+          <tr><td>5. Modèle</td><td class="mono xs">etape_modele</td><td>Forêt aléatoire de 300 arbres, nettoyage des exemples douteux, validation croisée par blocs</td><td class="mono xs">modele/</td></tr>
+          <tr><td>6. Carte</td><td class="mono xs">etape_prediction</td><td>Prédit chaque dalle puis assemble la mosaïque à 10&nbsp;m</td><td class="mono xs">4_cartes/</td></tr>
+          <tr><td>7. Parcelles</td><td class="mono xs">etape_parcelles</td><td>Repère les vignes sorties du RPG, découpe les îlots, calcule devenir, enjeux, projets, priorité</td><td class="mono xs">parcelles_arrachees.gpkg</td></tr>
+          <tr><td>7b. Correction</td><td class="mono xs">etape_correction</td><td>Mesure les rangs sur l'orthophoto, cale le modèle, corrige, estime la surface</td><td class="mono xs">chiffre_cle.json</td></tr>
+          <tr><td>8. Rapport</td><td class="mono xs">etape_rapport</td><td>Couches de vérification QGIS, carte web, figures, rapport HTML</td><td class="mono xs">5_resultats/</td></tr>
+          <tr><td>Validation</td><td class="mono xs">verite_ddtm</td><td>Confronte l'outil aux arrachages DDTM et corrige le rappel avec la vérification</td><td class="mono xs">validation/</td></tr>
+          <tr><td>Export</td><td class="mono xs">exporter_site</td><td>Rassemble les données de ce site</td><td class="mono xs">site_donnees.zip</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid2" style="margin-top:20px">
+      <div class="card reveal">
+        <h3>Choix d'ingénierie</h3>
+        <ul class="small" style="padding-left:18px;margin:0">
+          <li><b>Reprise&nbsp;:</b> avec <code>REPRENDRE = True</code>, toute étape déjà calculée est relue. Les scores de rangs sont mis en cache parcelle par parcelle&nbsp;: un «&nbsp;Run All&nbsp;» relit ce qui est fait au lieu de le recalculer.</li>
+          <li><b>Réseau fragile&nbsp;:</b> chaque requête est réessayée jusqu'à 6 fois avec une attente qui double. Une requête WFS qui renvoie le maximum d'objets est redécoupée en quatre, récursivement, jusqu'à être complète.</li>
+          <li><b>Mémoire&nbsp;:</b> la mosaïque est stockée en entiers 16 bits et lue bande par bande&nbsp;; les dalles libèrent leurs images au fur et à mesure.</li>
+          <li><b>Vitesse&nbsp;:</b> orthophotos téléchargées en parallèle (4 fils), calculs vectorisés avec NumPy et SciPy.</li>
+          <li><b>Honnêteté statistique&nbsp;:</b> validations croisées par blocs spatiaux (2,5&nbsp;km pour la carte, 2&nbsp;km pour le modèle de vigne), pour ne jamais tester sur les voisines d'un exemple d'apprentissage.</li>
+          <li><b>Tests&nbsp;:</b> <code>autotest()</code> fait tourner la correction, les indices, l'estimation et le rapport sur une petite zone fictive, sans réseau.</li>
+          <li><b>Traçabilité&nbsp;:</b> chaque exécution ajoute une ligne au journal (seuil, méthode, chiffres clés).</li>
+        </ul>
+      </div>
+      <div class="reveal">
+        <pre><span class="c"># extrait réel : le score de rangs (simplifié)</span>
+<span class="k">def</span> score_rangs(gris, masque, res=0.25, pmin=1.0, pmax=4.0):
+    a = gris - ndi.gaussian_filter(gris, 6.0 / res)   <span class="c"># passe-haut</span>
+    a *= np.outer(np.hanning(h), np.hanning(w))     <span class="c"># fenêtre</span>
+    P = np.abs(np.fft.fftshift(np.fft.fft2(a))) ** 2  <span class="c"># spectre</span>
+    bande = (F >= 1 / pmax) &amp; (F <= 1 / pmin)        <span class="c"># 1 à 4 m</span>
+    i = np.argmax(np.where(bande, P, -1))            <span class="c"># pic</span>
+    <span class="c"># même direction (6° près), fréquences voisines</span>
+    bas  = (dt <= 6) &amp; (F >= 0.55 * f0) &amp; (F <= 0.8 * f0)
+    haut = (dt <= 6) &amp; (F >= 1.25 * f0) &amp; (F <= 1.6 * f0)
+    fond = np.sqrt(np.median(P[bas]) * np.median(P[haut]))
+    <span class="k">return</span> P.ravel()[i] / fond                   <span class="c"># score</span></pre>
+        <pre style="margin-top:14px"><span class="c"># cellule de paramètres du notebook</span>
+<span class="k">import</span> script_vignes_arrachees <span class="k">as</span> fp
+fp.POINT_LONLAT = (-0.20, 44.75)   <span class="c"># centre de la zone</span>
+fp.TEST_KM = 40                    <span class="c"># carré de 40 km</span>
+fp.REPRENDRE = True                <span class="c"># Run All rapide</span>
+res = fp.etape_correction()        <span class="c"># rangs, correction, estimation</span>
+fp.verite_ddtm()                   <span class="c"># validation indépendante</span>
+fp.exporter_site()                 <span class="c"># données de ce site</span></pre>
+        <p class="small muted" style="margin-top:10px">Bibliothèques&nbsp;: GeoPandas, Shapely, Rasterio, odc-stac et pystac, scikit-learn, SciPy, NumPy, pandas, Matplotlib. Exécution sur Onyxia, stockage MinIO.</p>
+      </div>
+    </div>
+    <div class="reveal" style="margin-top:28px">
+      <span class="eyebrow">Compétences mobilisées</span>
+      <div class="skills" style="margin-top:12px">
+        <span><b>Télédétection</b>&nbsp;: séries Sentinel-2, indices, composites</span>
+        <span><b>Apprentissage automatique</b>&nbsp;: forêt aléatoire, régression logistique, validation croisée spatiale</span>
+        <span><b>Traitement du signal</b>&nbsp;: transformée de Fourier 2D</span>
+        <span><b>Statistique</b>&nbsp;: estimation de surface, bootstrap</span>
+        <span><b>SIG</b>&nbsp;: GeoPandas, Rasterio, services WFS et WMS, QGIS</span>
+        <span><b>Agronomie</b>&nbsp;: sols, eau, contraintes de projets</span>
+        <span><b>Aide à la décision</b>&nbsp;: enjeux, freins, priorités</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sources">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="eyebrow">Sources</span><h2>D'où viennent les chiffres</h2></div>
+    <ol class="sources reveal">
+      <li>Agreste Nouvelle-Aquitaine, <i>Essentiel</i> n°80, «&nbsp;La filière viticole girondine&nbsp;: chiffres clés&nbsp;», juin 2026. <a href="https://draaf.nouvelle-aquitaine.agriculture.gouv.fr/IMG/pdf/essentiel_no80_-_la_filiere_viticole_girondine___chiffres_cles.pdf" target="_blank" rel="noopener">PDF</a></li>
+      <li>Préfecture de Nouvelle-Aquitaine, «&nbsp;Ouverture du dispositif d'arrachage sanitaire en Gironde&nbsp;», novembre 2023. <a href="https://www.prefectures-regions.gouv.fr/nouvelle-aquitaine/Actualites/Ouverture-du-dispositif-d-arrachage-sanitaire-en-Gironde" target="_blank" rel="noopener">Lien</a></li>
+      <li>Préfecture de Nouvelle-Aquitaine, «&nbsp;Foncière d'avenir en Gironde&nbsp;: avec 430 dossiers déposés, l'appel à manifestation d'intérêt…&nbsp;», 19 juin 2026. <a href="https://www.prefectures-regions.gouv.fr/nouvelle-aquitaine/Actualites/Fonciere-d-avenir-en-Gironde-Avec-430-dossiers-deposes-l-appel-a-manifestation-d-interet" target="_blank" rel="noopener">Lien</a></li>
+      <li>R. Lecocq, «&nbsp;Foncière d'avenir en Gironde&nbsp;: 4400 ha potentiellement concernés&nbsp;», Pleinchamp, 15 juillet 2026. <a href="https://www.pleinchamp.com/actualite/fonciere-d-avenir-en-gironde-4400-ha-potentiellement-concernes" target="_blank" rel="noopener">Lien</a></li>
+      <li>DDTM de la Gironde, «&nbsp;Dispositif d'arrachage sanitaire des vignes en Gironde en renaturation et diversification, première vague&nbsp;», data.gouv.fr, Licence Ouverte 2.0, mis à jour le 4 juin 2026. <a href="https://www.data.gouv.fr/datasets/dispositif-darrachage-sanitaire-des-vignes-en-gironde-en-renaturation-et-diversification-premiere-vague-1" target="_blank" rel="noopener">data.gouv.fr</a></li>
+      <li>Olofsson P. et al. (2014), <i>Good practices for estimating area and assessing accuracy of land change</i>, Remote Sensing of Environment 148, p. 42 à 57. <a href="https://doi.org/10.1016/j.rse.2014.02.015" target="_blank" rel="noopener">doi</a></li>
+      <li>Données de l'outil&nbsp;: IGN Géoplateforme (RPG, BD TOPO, BD Forêt, OCS GE, BD ORTHO, haies, couches BCAE, cadastre), Copernicus Sentinel-2 via Microsoft Planetary Computer, INPN (PatriNat), GBIF, OpenObs, ISRIC SoilGrids, Géorisques, Géoportail de l'urbanisme.</li>
+    </ol>
+  </div>
+</section>
+
+<footer><div class="wrap">Site construit à partir des sorties réelles du pipeline (exécution du 12 octobre 2026). Les démos interactives utilisent des images simulées, signalées comme telles. Imagerie&nbsp;: IGN, Copernicus.</div></footer>
+
+<script src="data.js"></script>
+<script>
+const D=window.DATA, M=D.meta, F=D.fun, T=D.T;
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const fr=(x,d=0)=>Number(x).toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const pc=x=>(x>0&&x<0.01?'moins de 1':Math.round(x*100))+' %';
+const tx=i=>i>=0?T[i]:'';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* thème */
+(function(){const b=document.getElementById('theme'),r=document.documentElement;let s=null;try{s=localStorage.getItem('vt')}catch(e){}if(s)r.dataset.theme=s;
+b.onclick=()=>{const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=dark?'light':'dark';try{localStorage.setItem('vt',r.dataset.theme)}catch(e){}legend();redraw();funnel()}})();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.04});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+const links=[...document.querySelectorAll('#navlinks a')];
+const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}}),{rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('section[id]').forEach(s=>so.observe(s));
+
+/* ---------- couleurs ---------- */
+const DEVCOL=['#9089e6','#bdb7f3','#e3b34c','#8dc463','#c4782c','#3aa7a2','#8b7b66','#e2453f'];
+const ENJCOL=['#2a78d6','#1e7a3c','#b0896a','#e04b45','#7f77dd','#e9a210','#94c15a','#cfcac0'];
+const DEVS=D.DEV;
+
+/* ---------- vidéo ---------- */
+const CHAPTERS=[["Ouverture",0],["01 · Le problème",6.5],["02 · Les données",49],["03 · La méthode",68.5],["04 · Les résultats",152.5],["05 · Fiabilité et limites",241],["06 · À quoi ça sert",277.5],["Conclusion",294.5]];
+(function(){const v=document.getElementById('vid'),src=document.getElementById('vsrc'),fail=document.getElementById('vfail'),ul=document.getElementById('chap');
+ const mmss=t=>`${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}`;
+ ul.innerHTML=CHAPTERS.map(([n,t],i)=>`<li><button data-i="${i}"><span class="t">${mmss(t)}</span><span>${n}</span></button></li>`).join('');
+ const bts=[...ul.querySelectorAll('button')];
+ bts.forEach(b=>b.onclick=()=>{const t=CHAPTERS[+b.dataset.i][1];try{v.currentTime=t+0.05;v.play()}catch(e){}});
+ v.addEventListener('timeupdate',()=>{let k=0;CHAPTERS.forEach(([n,t],i)=>{if(v.currentTime>=t-0.01)k=i});bts.forEach((b,i)=>b.classList.toggle('on',i===k))});
+ const ko=()=>{v.hidden=true;fail.hidden=false};
+ src.addEventListener('error',ko);v.addEventListener('error',ko);
+ setTimeout(()=>{if(v.error||v.networkState===3)ko()},1500);
+})();
+
+/* ---------- réponses ---------- */
+const dh=F.dev_ha;
+document.getElementById('answers').innerHTML=[
+ ['Question 1 · Lesquelles sont vraiment arrachées ?',`${fr(F.arr)} <span>ha</span>`,`sur ${fr(F.tot)}&nbsp;ha sortis de la vigne PAC entre 2019 et 2024. Les ${fr(F.vigne)}&nbsp;ha restants (${F.pc_vigne}&nbsp;%) sont toujours des vignes, simplement plus déclarées. Estimation corrigée des erreurs&nbsp;: ${fr(M.est24[0])}&nbsp;ha (${fr(M.est24[1])} à ${fr(M.est24[2])}).`,'#r1','Voir l’entonnoir'],
+ ['Question 2 · Que sont-elles devenues ?',`${fr(F.arrnd)} <span>ha hors PAC</span>`,`arrachés que la PAC ne suit plus, en plus des ${fr(F.decl)}&nbsp;ha déclarés autre chose (jachère, prairie, cultures). Surtout des parcelles fauchées ou entretenues, dont ${fr(dh[7])}&nbsp;ha sans entretien visible ou en friche.`,'#r2','Voir le devenir'],
+ ['Question 3 · Qu’en faire, et par où commencer ?',`${fr(F.n_arr)} <span>fiches</span>`,`une par parcelle arrachée&nbsp;: enjeu de biodiversité, cinq familles de projets évaluées avec leurs raisons, score de priorité. Pistes et priorités à discuter sur le terrain.`,'#r3','Voir les pistes']
+].map(([q,v,t,h,l])=>`<div class="card reveal in"><span class="q">${q}</span><div class="big">${v}</div><p class="small">${t}</p><a class="go" href="${h}">${l} →</a></div>`).join('');
+document.getElementById('whyn').textContent=`${fr(F.n_vigne)} parcelles sur ${fr(F.n)}`;
+document.getElementById('zonetxt').innerHTML=`${fr(F.n)} parcelles sorties de la vigne PAC entre 2019 et 2024, soit ${fr(F.tot)}&nbsp;ha.`;
+document.getElementById('obs').textContent=fr(M.obs_s2);
+
+/* ---------- entonnoir ---------- */
+const EX=(()=>{const e={tot:0,decl:0,nd:0,s2v:0,resc:0,arrnd:0};D.P.forEach(r=>{const dev=r[1],ha=r[3],resc=r[11];e.tot+=ha;if(dev>=2&&dev<=5)e.decl+=ha;else{e.nd+=ha;if(dev>=6)e.arrnd+=ha;else if(resc)e.resc+=ha;else e.s2v+=ha}});e.s2n=e.resc+e.arrnd;return e})();
+function funnel(){
+ const C={vine:css('--vine'),taupe:'#857561',leaf:'#1d9873',vio:'#6f66d6',vio2:'#a39cf0',ora:'#e0681b',red:'#d14b45'};
+ const rows=[
+  {k:'Départ · RPG',q:'Parcelles sorties de la vigne dans la PAC, 2019 à 2024',s:[[EX.tot,C.vine,`${fr(F.tot)} ha`,`${fr(F.n)} parcelles`,`${fr(F.n)} parcelles déclarées en vigne puis plus en vigne`]]},
+  {k:'Étape 1 · PAC 2024',q:'Que dit la déclaration 2024 ?',s:[[EX.nd,C.taupe,`${fr(F.nd)} ha`,'plus déclarées',`${fr(F.n_nd)} parcelles plus déclarées du tout (${fr(F.nd)} ha) : à trancher`],[EX.decl,C.leaf,`${fr(F.decl)} ha`,'déclarées autre chose',`${fr(F.n_decl)} parcelles déclarées autre chose (${fr(F.decl)} ha) : devenir connu`]]},
+  {k:'Étape 2 · Sentinel-2',q:'Un signal de vigne à 10 m ?',s:[[EX.s2v,C.vio,`${fr(F.s2v)} ha`,'signal de vigne',`${fr(F.n_s2v)} parcelles avec un signal de vigne (${fr(F.s2v)} ha)`],[EX.s2n,C.ora,`${fr(F.s2n)} ha`,'pas de signal',`${fr(F.n_s2n)} parcelles sans signal de vigne (${fr(F.s2n)} ha)`],[EX.decl,C.leaf,'','',null]]},
+  {k:'Étape 3 · orthophoto',q:'Des rangs visibles à 20 cm ?',s:[[EX.s2v,C.vio,'','',null],[EX.resc,C.vio2,`${fr(F.resc)} ha`,'rangs vus',`${fr(F.n_resc)} parcelles avec des rangs (${fr(F.resc)} ha) : vigne en place`],[EX.arrnd,C.red,`${fr(F.arrnd)} ha`,'sans rangs',`${fr(F.n_arrnd)} parcelles sans rangs (${fr(F.arrnd)} ha) : arrachées, hors PAC`],[EX.decl,C.leaf,'','',null]]}];
+ const el=document.getElementById('fun');
+ el.innerHTML=rows.map(r=>`<div class="frow"><div class="fh"><span class="fk">${r.k}</span><span class="fq">${r.q}</span></div><div class="fbar">${r.s.map(([v,c,a,b,l])=>`<div class="${l===null?'ghost':''}" style="flex:${v} 1 0;background:${c}" title="${l||''}"><b>${a}</b><span>${b}</span></div>`).join('')}</div><div class="fleg">${r.s.filter(x=>x[4]).map(([v,c,a,b,l])=>`<span><i style="background:${c}"></i>${l}</span>`).join('')}</div></div>`).join('')+
+ `<div class="fres"><div style="flex:${EX.s2v+EX.resc} 1 0;border-color:${C.vio}"><b style="color:${C.vio}">${fr(F.vigne)}&nbsp;ha toujours en vigne</b><span>${F.pc_vigne}&nbsp;% · ${fr(F.n_vigne)} parcelles</span></div><div style="flex:${EX.arrnd+EX.decl} 1 0;border-color:${C.leaf}"><b style="color:${C.leaf}">${fr(F.arr)}&nbsp;ha arrachés</b><span>${F.pc_arr}&nbsp;% · ${fr(F.n_arr)} parcelles</span></div></div>`;
+ el.querySelectorAll('.fbar>div').forEach(d=>{if(d.scrollWidth>d.clientWidth+1)d.classList.add('hid')});
+}
+funnel();window.addEventListener('resize',()=>{clearTimeout(window._ft);window._ft=setTimeout(funnel,150)});
+document.getElementById('esttxt').innerHTML=`La carte compte <b>${fr(F.arr)}&nbsp;ha</b> arrachés. Mais l'outil se trompe parfois dans les deux sens&nbsp;: les contrôles à l'œil montrent qu'il garde en vigne des parcelles déjà arrachées plus souvent qu'il ne fait l'inverse. Corrigée de ces erreurs mesurées, l'estimation donne <b>${fr(M.est24[0])}&nbsp;ha arrachés en mai 2024</b> (intervalle à 95&nbsp;%&nbsp;: ${fr(M.est24[1])} à ${fr(M.est24[2])}), dont ${fr(M.est24_nd)}&nbsp;ha non déclarés. Avec les images de 2026, l'estimation passe à <b>${fr(M.est26[0])}&nbsp;ha</b> (${fr(M.est26[1])} à ${fr(M.est26[2])})&nbsp;: un minimum, car les vignes encore déclarées en 2024 et arrachées depuis n'entrent pas dans le calcul.`;
+document.getElementById('restxt').innerHTML=`Sur les ${fr(F.tot)}&nbsp;ha sortis de la vigne dans la PAC, <b>${F.pc_vigne}&nbsp;% sont toujours des vignes</b>. Les ${fr(F.arr)}&nbsp;ha vraiment arrachés reçoivent chacun un devenir, un enjeu de biodiversité, des pistes de projets et une priorité.`;
+
+/* ---------- devenir ---------- */
+(function(){const ix=[2,3,4,5,6,7],tot=ix.reduce((a,i)=>a+dh[i],0),mx=Math.max(...ix.map(i=>dh[i]));
+ document.getElementById('devtitle').innerHTML=`Devenir des ${fr(F.arr)}&nbsp;ha arrachés`;
+ document.getElementById('dev').innerHTML=ix.map(i=>`<div class="b"><span>${DEVS[i]}${i>=6?' <span class="pill r" style="font-size:10.5px">hors PAC</span>':''}</span><span class="t"><i style="width:${dh[i]/mx*100}%;background:${DEVCOL[i]}"></i></span><span class="mono small" style="text-align:right">${fr(dh[i])} ha</span></div>`).join('');
+ document.getElementById('devnote').innerHTML=`Les quatre premières lignes viennent de la déclaration PAC 2024 (${fr(F.decl)}&nbsp;ha). Les deux dernières (${fr(F.arrnd)}&nbsp;ha) viennent de l'imagerie&nbsp;: «&nbsp;entretenue&nbsp;» si au moins une fauche par an ou une gestion vue depuis moins de 2 ans&nbsp;; sinon «&nbsp;sans entretien ou friche&nbsp;» (${fr(D.P.filter(r=>r[1]===7).length)} parcelles). Pour mémoire, les vignes encore en place&nbsp;: ${fr(dh[0])}&nbsp;ha non déclarées et ${fr(dh[1])}&nbsp;ha sorties du dernier RPG.`})();
+(function(){const ix=[2,3,4,5,6,7];
+ document.getElementById('tps').innerHTML=D.tps.map(([k,ha,v])=>`<div class="row"><span>${k} an${k>1?'s':''} après</span><span class="bar">${v.map((x,i)=>`<i title="${DEVS[ix[i]]} : ${fr(x)} ha" style="width:${x/ha*100}%;background:${DEVCOL[ix[i]]}"></i>`).join('')}</span><span class="mono small" style="text-align:right">${fr(ha)} ha</span></div>`).join('');
+ document.getElementById('tpsleg').innerHTML=ix.map(i=>`<span><i style="background:${DEVCOL[i]}"></i>${DEVS[i]}</span>`).join('');
+ const a=D.tps[0],b=D.tps[D.tps.length-1];
+ document.getElementById('tpstxt').innerHTML=`<li>Un an après la dernière vigne déclarée, <b>${fr(a[3],0)}&nbsp;%</b> de la surface arrachée n'est plus déclarée à la PAC&nbsp;; au bout de ${b[0]} ans, <b>${fr(b[3],0)}&nbsp;%</b>.</li><li>La part <b>sans entretien ou en friche</b> passe de ${fr(a[4],1)}&nbsp;% à <b>${fr(b[4],0)}&nbsp;%</b>.</li><li>La <b>jachère</b>, majoritaire au début (${pc(a[2][0]/a[1])}), recule à ${pc(b[2][0]/b[1])}.</li><li class="muted">À lire avec prudence&nbsp;: on ne suit pas les mêmes parcelles pendant six ans. On compare, sur une même année, des parcelles arrachées il y a 1 an, 2 ans, etc. C'est une tendance, pas une preuve&nbsp;: les plus anciennes n'étaient peut-être pas les mêmes au départ.</li>`})();
+
+/* ---------- enjeux ---------- */
+const EJDEF=["Zone humide BCAE (1,0), sol hydromorphe, lit majeur ou plus de 30 % en zone inondable (0,8), cours d'eau permanent à moins de 50 m (0,7). Seuil : 0,6.","Parcelle au contact d'une forêt (20 m au plus) dans un paysage boisé (au moins 20 % de forêt dans 250 m).","Années sans gestion visible : au moins 1,8 an.","Maille de 2 km dans les 20 % les plus riches en espèces menacées observées (GBIF, OpenObs), si la maille est assez prospectée.","Natura 2000, ZNIEFF de type 1, protection forte ou zone humide BCAE. La ZNIEFF de type 2 seule ne suffit pas.","Au moins 60 % de milieux semi-naturels (forêt, prairie, lande) dans 250 m.","Au moins 60 m de haies par hectare de parcelle.","Aucune composante n'atteint son seuil : les données disponibles ne signalent rien de fort, ce qui ne veut pas dire sans intérêt."];
+let ejSel=0;function drawEJ(){const arr=D.ENJ.map((l,i)=>[l,ENJCOL[i],D.enj[l]||0,EJDEF[i]]).sort((a,b)=>b[2]-a[2]);const mx=arr[0][2];
+ document.getElementById('ejtitle').innerHTML=`D'abord, ce qu'il faut préserver&nbsp;: enjeu principal des ${fr(F.arr)}&nbsp;ha arrachés`;
+ document.getElementById('ej').innerHTML=arr.map(([l,c,h],i)=>`<button class="${i===ejSel?'on':''}" data-i="${i}"><span class="sw" style="background:${c}"></span><span>${l}</span><span class="t" style="width:${h/mx*100}%;background:${c}"></span><span class="h">${fr(h)} ha</span></button>`).join('');
+ document.querySelectorAll('#ej button').forEach(b=>b.onclick=()=>{ejSel=+b.dataset.i;drawEJ()});
+ document.getElementById('ejdef').innerHTML=`<p class="small"><b>${arr[ejSel][0]}</b> · ${arr[ejSel][3]}</p>`}
+drawEJ();
+const BIOF=[['Carte des enjeux','enjeux',"Chaque parcelle arrachée colorée par son enjeu principal, sur fond de forêts, eau, communes et zonages."],['Zooms','zooms',"Trois secteurs vus de près : on distingue les enjeux parcelle par parcelle."],['Par commune','communes',"Par commune : surfaces arrachées, part à enjeu fort, enjeu dominant."],['Robustesse','robustesse',"L'indice écologique dépend de poids choisis à la main (20 % zonages, 15 % continuité forestière…). Pour le tester, le script tire 500 jeux de poids au hasard autour de ces valeurs et regarde où chaque parcelle de plus de 1 ha se classe à chaque fois. Barre courte : la parcelle reste en tête quels que soient les poids. Barre longue : son rang dépend surtout des poids."]];
+const bt=document.getElementById('biotabs');BIOF.forEach((f,i)=>{const b=document.createElement('button');b.className='btn'+(i===0?' on':'');b.textContent=f[0];b.onclick=()=>{[...bt.children].forEach(x=>x.classList.toggle('on',x===b));bioFig(i)};bt.appendChild(b)});
+const imgsrc=n=>(window.IMGS&&window.IMGS[n])||('img/'+n+'.webp');
+function bioFig(i){const f=BIOF[i];document.getElementById('biofig').innerHTML=`<img src="${imgsrc(f[1])}" alt="${esc(f[2])}" loading="lazy"><figcaption>${f[2]} Figure produite par le pipeline.</figcaption>`}bioFig(0);
+
+/* ---------- projets ---------- */
+const FAMLIB={grandes_cultures:'Grandes cultures',prairie_elevage:'Prairie et élevage',arbo_maraichage:'Arboriculture, maraîchage',agroforesterie:'Agroforesterie',boisement_renaturation:'Boisement, renaturation'};
+(function(){const N=['favorable','possible','sous conditions','peu adapté'],Cc=['#1d9873','#8dc463','#e3b34c','#d9cfc0'];
+ const order=['prairie_elevage','agroforesterie','boisement_renaturation','arbo_maraichage','grandes_cultures'];
+ document.getElementById('proj').innerHTML=order.map(k=>{const v=D.proj[k],s=v.reduce((a,b)=>a+b,0);return `<div class="b"><span>${FAMLIB[k]}</span><span class="t">${v.map((x,i)=>`<i title="${N[i]} : ${fr(x)} ha" style="width:${x/s*100}%;background:${Cc[i]}"></i>`).join('')}</span><span class="mono small" style="text-align:right">${fr(v[0])} ha</span></div>`}).join('')+`<p class="xs muted" style="margin:4px 0 0">Chiffre de droite&nbsp;: hectares «&nbsp;favorables&nbsp;».</p>`;
+ document.getElementById('projleg').innerHTML=N.map((n,i)=>`<span><i style="background:${Cc[i]}"></i>${n}</span>`).join('');
+ const P=D.proj,b=D.bal,fb=b['faible intérêt des deux côtés']||0;
+ document.getElementById('projtxt').innerHTML=`<li><b>La prairie et l'élevage</b> sont envisageables presque partout (${fr(P.prairie_elevage[0]+P.prairie_elevage[1])}&nbsp;ha favorables ou possibles), à condition de trouver un éleveur, des clôtures et un point d'eau.</li><li><b>L'agroforesterie</b> est favorable sur ${fr(P.agroforesterie[0])}&nbsp;ha, surtout sur les pentes de 5 à 15&nbsp;%, contre l'érosion.</li><li><b>Les grandes cultures</b> ne sont favorables que sur ${fr(P.grandes_cultures[0])}&nbsp;ha&nbsp;: sols engorgés, parcelles de moins de 1&nbsp;ha, pentes.</li><li><b>Le boisement ou la renaturation</b> est possible partout et favorable sur ${fr(P.boisement_renaturation[0])}&nbsp;ha (enjeu écologique, pente forte).</li><li>${pc(fb/F.arr)} des surfaces arrachées n'ont <b>ni vocation agricole forte ni enjeu écologique fort</b> d'après les indices (moins de 60/100 des deux côtés)&nbsp;: c'est là que se joue l'essentiel, par le regroupement et des projets collectifs.</li>`})();
+
+/* ---------- top 20 ---------- */
+/* défini après la carte */
+
+/* ---------- fiabilité ---------- */
+(function(){const v=M.val;const mat=(m,n,title)=>{const ok=m[0][0]+m[1][1];return `<div><h4>${title}</h4><div class="mat"><div class="h"></div><div class="h">outil&nbsp;: vigne</div><div class="h">outil&nbsp;: arrachée</div><div class="h" style="text-align:right">vue&nbsp;: vigne</div><div class="c" style="background:var(--leaf);color:#fff">${m[0][0]}</div><div class="c" style="background:var(--bg2)">${m[0][1]}</div><div class="h" style="text-align:right">vue&nbsp;: arrachée</div><div class="c" style="background:var(--bg2)">${m[1][0]}</div><div class="c" style="background:color-mix(in srgb,var(--leaf) 65%,transparent);color:#fff">${m[1][1]}</div></div><p class="xs muted" style="margin:0">${ok} verdicts identiques sur ${n} (${Math.round(ok/n*100)}&nbsp;%)</p></div>`};
+ document.getElementById('mats').innerHTML=mat(v.m24,v.n24,'Mai 2024, même orthophoto')+mat(v.m26,v.n26,'2026, images récentes');
+ const m=v.m24;document.getElementById('valtxt').innerHTML=`Sur la photo de mai 2024, quand l'outil dit «&nbsp;vigne&nbsp;», il a raison <b>${m[0][0]} fois sur ${m[0][0]+m[1][0]}</b>&nbsp;; quand il dit «&nbsp;arrachée&nbsp;», <b>${m[1][1]} fois sur ${m[0][1]+m[1][1]}</b>. En 2026, l'accord tombe à ${Math.round((v.m26[0][0]+v.m26[1][1])/v.n26*100)}&nbsp;%&nbsp;: surtout des vignes arrachées après la photo de 2024, que l'outil ne pouvait pas voir (${v.m26[1][0]} cas).`;
+ const dd=M.ddtm,c=dd.cat;
+ document.getElementById('ddtmk').innerHTML=[[pc(dd.rappel),`des surfaces DDTM analysées par l'outil, et déjà arrachées en mai 2024, sont bien classées arrachées [${pc(dd.ic[0])} à ${pc(dd.ic[1])}].`],[pc(dd.rappel_nd),`seulement sur les parcelles non déclarées à la PAC, la partie difficile [${pc(dd.ic_nd[0])} à ${pc(dd.ic_nd[1])}]. La cause principale&nbsp;: les arrachages partiels (${dd.partiels} écarts dans l'échantillon vérifié).`],[fr(Math.round(c.v_sans))+' ha',`d'erreurs franches (vigne sans rangs vus sur une parcelle DDTM), moins de 1&nbsp;% de la surface DDTM.`]].map(([v,l])=>`<div><div class="score" style="font-size:38px">${v}</div><p class="small muted" style="margin-top:6px">${l}</p></div>`).join('');
+ const rows=[['a_decl','Arrachée, déclarée autre chose à la PAC','Bien vue, devenir connu.'],['a_sat','Arrachée, vue par satellite et orthophoto','Bien vue : la partie que seule l’imagerie trouve.'],['v_rangs','Vigne en place, rangs vus en mai 2024','Pas forcément une erreur : vigne encore debout sur la photo, arrachée ensuite. La vérification de 39 parcelles le confirme dans '+pc(dd.part_oui)+' des cas.'],['v_sans','Vigne en place, sans rangs vus','Erreurs probables de l’outil.'],['marge','Marges cadastrales','Le contour cadastral déborde de la vigne (chemins, tournières) : pas un arrachage manqué.'],['rpg_vigne','Encore vigne au dernier RPG (2024)','Arrachée après la dernière déclaration : visible avec le prochain RPG.'],['rpg_ancien','Vigne dans un RPG plus ancien','Probablement écartée par la surface minimale ou un contour différent.'],['hors','Jamais déclarée en vigne au RPG','Hors du champ de l’outil, qui part de la PAC.']];
+ document.getElementById('ddtmtab').innerHTML=rows.map(([k,l,t])=>`<tr><td>${l}</td><td class="num">${fr(c[k],1)}</td><td class="small">${t}</td></tr>`).join('');
+ document.getElementById('okl').innerHTML=`<li><b>Écarter les fausses pistes&nbsp;:</b> ${fr(F.vigne)}&nbsp;ha de vignes encore en place retirés de la liste.</li><li><b>Dire ce que sont devenues les parcelles</b>, y compris les ${fr(F.arrnd)}&nbsp;ha arrachés que la PAC ne suit plus.</li><li><b>Peu d'erreurs franches</b> face à une source indépendante&nbsp;: ${fr(Math.round(c.v_sans))}&nbsp;ha.</li><li><b>Une estimation avec sa marge d'erreur</b>, corrigée par les contrôles.</li><li><b>Tout est traçable</b>&nbsp;: chaque fiche donne les raisons de chaque verdict.</li>`;
+ document.getElementById('kol').innerHTML=`<li><b>Il part de la PAC.</b> Dans le test DDTM, ${fr(Math.round(c.hors))}&nbsp;ha d'arrachages concernent des vignes jamais déclarées au RPG, et ${fr(Math.round(c.rpg_vigne))}&nbsp;ha des vignes encore déclarées en 2024.</li><li><b>Il ne voit pas les arrachages partiels.</b> Un morceau arraché au milieu d'une vigne laisse la parcelle classée vigne. C'est la cause principale du ${pc(dd.rappel_nd)} sur les parcelles non déclarées. Les surfaces arrachées sont donc <b>un minimum</b>.</li><li><b>Les rangs décrivent mai 2024</b>&nbsp;; après, seule la vérification de 2026 renseigne.</li><li><b>Règles de projets et d'enjeux expertes</b>, non calibrées&nbsp;; sols et pH issus de cartes modélisées.</li><li><b>Contrôles par photo-interprétation</b>, faits par une seule personne&nbsp;: pas de vérification sur le terrain.</li>`})();
+
+/* ---------- méthode : étapes ---------- */
+const STEPS=[
+ {t:'Point de départ',titre:'Point de départ : repérer et découper les parcelles',in:'RPG 2018 à 2024 (IGN).',do:`<p>Une parcelle est candidate si elle a été déclarée en vigne (groupe de cultures 21) dans un RPG de 2018 à 2023 et ne l'est plus en 2024.</p><ul><li>Les grands îlots sont redécoupés selon les dernières parcelles de vigne déclarées.</li><li>Surface minimale d'un îlot arraché&nbsp;: 0,5&nbsp;ha. Un morceau de découpage de moins de 0,2&nbsp;ha est rattaché à son plus grand voisin.</li></ul>`,out:`${fr(F.n)} parcelles, ${fr(F.tot)}&nbsp;ha.`,why:"Les erreurs se concentraient sur de grands îlots qui mélangeaient arrachage, abandon et vigne en place."},
+ {t:'Trier avec la PAC',titre:'Trier avec la déclaration PAC 2024',in:'RPG 2024.',do:`<p>Si la parcelle est déclarée en 2024, son devenir est lu dans la déclaration&nbsp;:</p><ul><li>jachère (groupe 11)&nbsp;;</li><li>prairie ou fourrage (groupes 16 à 19)&nbsp;;</li><li>grandes cultures (groupes 1 à 9, 14, 15, 24, 25)&nbsp;;</li><li>autre culture (groupes 20, 22, 23, 26 à 28).</li></ul><p>Ces parcelles sont comptées arrachées&nbsp;: les contrôles à l'œil l'ont confirmé à chaque fois.</p>`,out:`${fr(F.n_decl)} parcelles (${fr(F.decl)}&nbsp;ha) au devenir connu&nbsp;; ${fr(F.n_nd)} parcelles (${fr(F.nd)}&nbsp;ha) plus déclarées du tout, à trancher.`,why:"Quand la PAC sait, on s'en sert : c'est la donnée la plus sûre."},
+ {t:'Lire le sol',titre:"Lire l'occupation du sol avec Sentinel-2",in:'Images Sentinel-2 L2A de 2023 à 2025, 10 bandes, 10 m.',do:`<p>Toutes les scènes à moins de 70&nbsp;% de nuages sont résumées par pixel en 108 variables&nbsp;: médianes saisonnières des 10 bandes, 8 indices (NDVI, NDMI, NBR, MNDWI, BSI, NDRE, CMR, FEO), séries temporelles, part du temps en sol nu, fauches (chute du NDVI de plus de 0,25 en 45 jours au plus, confirmée par l'image suivante), années depuis la dernière gestion.</p><p>Une forêt aléatoire de 300 arbres apprend 9 classes à partir d'exemples tirés de BD TOPO, BD Forêt, OCS GE et RPG. Exactitude <b>84,5&nbsp;%</b> en validation croisée spatiale (blocs de 2,5&nbsp;km, 60&nbsp;000 pixels)&nbsp;: eau 0,98, bâti 0,94, culture 0,91, culture pérenne 0,89, forêt 0,87, sol minéral 0,77, prairie 0,72, lande 0,65 (score F1).</p><p><b>Règle de devenir</b> d'une parcelle non déclarée, dans l'ordre&nbsp;:</p><ol class="rules"><li>plus de 50&nbsp;% de culture pérenne&nbsp;: vigne probablement en place (ou «&nbsp;sortie du dernier RPG&nbsp;» si la vigne était encore déclarée en 2023)&nbsp;;</li><li>sinon, au moins une fauche par an ou une gestion vue depuis moins de 2 ans&nbsp;: entretenue&nbsp;;</li><li>sinon, forêt et lande sur plus de 50&nbsp;%&nbsp;: en enfrichement&nbsp;;</li><li>sinon, sol nu plus de 40&nbsp;% du temps&nbsp;: sol nu&nbsp;;</li><li>sinon&nbsp;: sans entretien visible.</li></ol>`,out:`${fr(F.n_s2v)} parcelles avec un signal de vigne, ${fr(F.n_s2n)} sans.`,why:"Les bases officielles servent d'exemples ; le modèle ne voit que le satellite, ce qui permet de l'appliquer partout."},
+ {t:'Voir les rangs',titre:"Chercher les rangs de vigne à 20 cm",in:'BD ORTHO IGN, prise de vue du 11 mai 2024, lue à 25 cm par pixel.',do:`<p>Sur chaque parcelle non déclarée, une fenêtre de 80&nbsp;m au plus est analysée&nbsp;: filtre passe-haut de 6&nbsp;m, fenêtre de Hann, spectre de Fourier 2D, pic le plus fort pour des périodes de 1 à 4&nbsp;m. Le <b>score de rangs</b> est la hauteur de ce pic divisée par le bruit voisin dans la même direction (à 6° près).</p><p>Le score, l'écartement mesuré et 17 indicateurs (composition Sentinel-2 de la parcelle, fauches, sol nu, NDVI maximal de chaque année et ses chutes, surface, année de la dernière vigne) alimentent une <b>régression logistique</b>. Elle l'a emporté en validation croisée spatiale (5 plis, blocs de 2&nbsp;km) sur le seuil seul (score de ${fr(M.seuil,0)}) et sur une forêt aléatoire, et n'est retenue que si elle gagne au moins 2 points d'exactitude.</p><p>Les rangs ne font qu'ajouter des vignes&nbsp;; une parcelle déclarée n'est jamais modifiée.</p>`,out:`Score mesuré sur ${fr(F.n_score)} parcelles. ${fr(F.n_resc)} parcelles (${fr(F.resc)}&nbsp;ha) sans signal de vigne à 10&nbsp;m repassent en vigne en place.`,why:"Seul moyen automatique de distinguer une vigne enherbée d'une prairie. Essaie le calcul juste en dessous."},
+ {t:'Contrôler',titre:'Contrôler à l’œil et estimer la surface',in:'Photo-interprétation de 138 parcelles (mai 2024) et 131 (2026).',do:`<p>Les contrôles calent le modèle de décision, puis corrigent l'estimation de surface (Olofsson et al., 2014)&nbsp;: 4 cases (rangs détectés ou non, signal pérenne ou non), part réellement arrachée mesurée dans chaque case, appliquée à la surface de la case. Intervalle à 95&nbsp;% par 2&nbsp;000 rééchantillonnages des parcelles vérifiées, case par case.</p>`,out:`${fr(M.est24[0])}&nbsp;ha arrachés en mai 2024 (${fr(M.est24[1])} à ${fr(M.est24[2])})&nbsp;; ${fr(M.est26[0])}&nbsp;ha en 2026 (${fr(M.est26[1])} à ${fr(M.est26[2])}).`,why:"Une carte se trompe toujours un peu : on mesure ses erreurs et on en tient compte au lieu de les ignorer."},
+ {t:'Qualifier',titre:'Qualifier et prioriser chaque parcelle arrachée',in:'Pente, sols, eau, risques, zonages, PLU, haies, forêts, espèces.',do:`<p>Pour chaque parcelle arrachée&nbsp;:</p><ul><li>un <b>indice écologique</b> sur 100 (8 composantes pondérées) et un <b>enjeu principal</b>&nbsp;;</li><li><b>cinq familles de projets</b> évaluées (favorable, possible, sous conditions, peu adapté), chacune avec ses raisons&nbsp;;</li><li>des <b>analyses de sol conseillées</b>&nbsp;;</li><li>un <b>score de priorité</b> sur 100.</li></ul><p>Toutes les règles sont détaillées plus bas.</p>`,out:`Une fiche par parcelle, ${fr(F.n_arr)} parcelles classées, synthèses par commune.`,why:"L'outil ne choisit pas une culture : il montre le possible, le bloquant et où agir d'abord."}];
+const pipe=document.getElementById('pipe'),box=document.getElementById('stepbox');
+STEPS.forEach((s,i)=>{const b=document.createElement('button');b.innerHTML=`<span class="n">${i===0?'départ':'étape '+i}</span><span class="t">${s.t}</span>`;b.onclick=()=>step(i);pipe.appendChild(b)});
+function step(i){const s=STEPS[i];[...pipe.children].forEach((b,j)=>b.classList.toggle('on',j===i));box.innerHTML=`<div><span class="eyebrow">${i===0?'Point de départ':`Étape ${i} sur ${STEPS.length-1}`}</span><h3 style="margin-top:8px;font-size:23px">${s.titre}</h3><div class="small">${s.do}</div><p class="small muted"><b>Pourquoi&nbsp;:</b> ${s.why}</p><div class="btns"><button class="btn" ${i===0?'disabled':''} data-go="${i-1}">Précédente</button><button class="btn" ${i===STEPS.length-1?'disabled':''} data-go="${i+1}">Suivante</button></div></div><div class="io"><div><b>Entrée</b>${s.in}</div><div><b>Sortie</b>${s.out}</div></div>`;box.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>step(+b.dataset.go))}
+step(0);
+
+/* ---------- règles ---------- */
+const POIDS=[['Zonage écologique',20],['Continuité forestière',15],['Milieux humides',15],['Mosaïque semi-naturelle',15],['Haies',10],['Espèces menacées',10],['Végétation spontanée',10],['Paysage varié',5]];
+const RT=[
+ ['Biodiversité',()=>`<div class="grid2"><div class="card"><h3>8 composantes, de 0 à 1</h3><p class="small muted">L'indice est la moyenne pondérée des composantes disponibles. L'enjeu principal est la composante qui dépasse <b>son seuil</b> (0,6 en général, 1,0 pour la mosaïque, 0,8 pour les espèces) de la plus grande marge.</p><div class="bars">${POIDS.map(([l,w])=>`<div class="b"><span>${l}</span><span class="t"><i style="width:${w/20*100}%;background:var(--leaf)"></i></span><span class="mono small" style="text-align:right">${w}&nbsp;%</span></div>`).join('')}</div><div class="callout amber" style="margin-bottom:0"><p class="small"><b>Une correction qui a compté&nbsp;:</b> la première règle de continuité forestière (toute forêt à moins de 200&nbsp;m) touchait 85&nbsp;% des parcelles. Elle exige maintenant le contact avec une forêt (20&nbsp;m au plus) dans un paysage boisé (au moins 20&nbsp;% de forêt dans 250&nbsp;m).</p></div></div><div class="card"><h3>Simulateur</h3><p class="small muted">Compose une parcelle&nbsp;: mêmes formules et mêmes seuils que le script.</p><div class="btns" id="bpre" style="margin-bottom:10px"></div><div id="bctl"></div><div style="display:flex;gap:16px;align-items:end;margin-top:12px;flex-wrap:wrap"><div><div class="small muted">Indice écologique</div><div class="score" id="bidx">…</div></div><div id="benj"></div></div><div class="statbar" id="bcomp" style="margin-top:12px"></div></div></div>`,bioInit],
+ ['Projets',()=>`<div class="tablewrap"><table><thead><tr><th>Famille</th><th>Favorable</th><th>Possible</th><th>Sous conditions</th><th>Peu adapté</th></tr></thead><tbody>
+<tr><td><b>Grandes cultures</b></td><td>pente &lt; 5&nbsp;%, au moins 3&nbsp;ha, forme compacte (compacité ≥ 0,3), sol non hydromorphe</td><td class="muted">jamais</td><td>pente &lt; 10&nbsp;% et au moins 1&nbsp;ha</td><td>sol très hydromorphe, lit majeur inondable à plus de 50&nbsp;%, ou les autres cas</td></tr>
+<tr><td><b>Prairie et élevage</b></td><td>sol très hydromorphe, lit majeur, érosion forte, ou pente de 10 à 25&nbsp;%</td><td>pente &lt; 25&nbsp;%</td><td>pente ≥ 25&nbsp;%</td><td class="muted">jamais</td></tr>
+<tr><td><b>Arboriculture, maraîchage</b></td><td>pente &lt; 8&nbsp;%, eau permanente à 300&nbsp;m au plus, inondable &lt; 10&nbsp;%, sol non hydromorphe</td><td class="muted">jamais</td><td>pH modélisé &lt; 5 ou &gt; 8,2, ou les autres cas</td><td>inondable &gt; 50&nbsp;%, pente ≥ 12&nbsp;% ou sol très hydromorphe</td></tr>
+<tr><td><b>Agroforesterie</b></td><td>pente de 5 à 15&nbsp;% (intérêt contre l'érosion)</td><td>pente &lt; 5&nbsp;%</td><td>pente ≥ 15&nbsp;%</td><td class="muted">jamais</td></tr>
+<tr><td><b>Boisement, renaturation</b></td><td>enjeu écologique (ZNIEFF 1, Natura 2000, protection forte, zone humide BCAE), pente ≥ 15&nbsp;% ou indice écologique ≥ 60</td><td>les autres cas</td><td class="muted">jamais</td><td class="muted">jamais</td></tr>
+</tbody></table></div><p class="small muted" style="margin-top:10px">Chaque fiche affiche les raisons chiffrées (pente, surface, hydromorphie, distance à l'eau, pH). Une prairie suppose un éleveur, des clôtures et un point d'eau&nbsp;; l'eau d'irrigation suppose un droit de prélèvement.</p>`],
+ ['Priorité',()=>`<div class="grid2"><div class="card"><h3>Le score sur 100</h3><div class="bars"><div class="b"><span>Grande surface</span><span class="t"><i style="width:100%;background:#5550c0"></i></span><span class="mono small" style="text-align:right">35&nbsp;%</span></div><div class="b"><span>Enjeu écologique</span><span class="t"><i style="width:71%;background:#1d9873"></i></span><span class="mono small" style="text-align:right">25&nbsp;%</span></div><div class="b"><span>Années sans gestion</span><span class="t"><i style="width:71%;background:#b8761a"></i></span><span class="mono small" style="text-align:right">25&nbsp;%</span></div><div class="b"><span>Regroupable</span><span class="t"><i style="width:43%;background:#d6527a"></i></span><span class="mono small" style="text-align:right">15&nbsp;%</span></div></div></div><div class="card"><h3>Comment chaque critère est mesuré</h3><ul class="small" style="padding-left:18px;margin:0"><li><b>Surface&nbsp;:</b> rang de la parcelle parmi toutes les parcelles arrachées (0 à 1).</li><li><b>Enjeu&nbsp;:</b> indice écologique divisé par 100.</li><li><b>Années sans gestion&nbsp;:</b> divisées par 3, plafonnées à 1.</li><li><b>Regroupable&nbsp;:</b> 1 si la parcelle appartient à un bloc d'îlots distants de moins de 100&nbsp;m.</li></ul><p class="small muted" style="margin-top:10px">Les poids sont un choix assumé, affichés et modifiables dans le script. Ils ne sont pas calibrés&nbsp;: ils ordonnent une liste de visites, pas une décision.</p></div></div>`]];
+const rt=document.getElementById('rtabs');RT.forEach((r,i)=>{const b=document.createElement('button');b.className='btn'+(i===0?' on':'');b.textContent=r[0];b.onclick=()=>{[...rt.children].forEach(x=>x.classList.toggle('on',x===b));showRule(i)};rt.appendChild(b)});
+function showRule(i){document.getElementById('rbox').innerHTML=RT[i][1]();if(RT[i][2])RT[i][2]()}
+/* simulateur biodiversité */
+const TYP=[['zonages','Zonage écologique','#7f77dd',0.6],['humide','Milieux humides','#2a78d6',0.6],['especes','Espèces menacées','#e04b45',0.8],['connectivite','Continuité forestière','#1e7a3c',0.6],['haies','Bocage et haies','#94c15a',0.6],['paysage','Mosaïque semi-naturelle','#e9a210',1.0],['succession','Végétation spontanée','#b0896a',0.6]];
+const BW={zonages:20,connectivite:15,humide:15,paysage:15,haies:10,especes:10,succession:10,heterogeneite:5};
+const BCTL=[{k:'zon',l:'Zonage',t:'sel',o:[['aucun',0],['ZNIEFF de type 2 seule',0.5],['Natura 2000, ZNIEFF 1 ou zone humide BCAE',1]]},{k:'hum',l:'Eau',t:'sel',o:[['rien de proche',0],["cours d'eau à moins de 50 m",0.7],['sol hydromorphe ou inondable',0.8],['zone humide BCAE',1]]},{k:'contact',l:"Au contact d'une forêt",t:'chk'},{k:'foret',l:'Forêt dans 250 m',t:'rng',min:0,max:60,st:1,u:' %'},{k:'semi',l:'Milieux semi-naturels dans 250 m',t:'rng',min:0,max:100,st:1,u:' %'},{k:'haies',l:'Haies par hectare',t:'rng',min:0,max:150,st:5,u:' m'},{k:'esp',l:'Rang de la maille (espèces)',t:'rng',min:0,max:100,st:1,u:' %'},{k:'gest',l:'Années sans gestion',t:'rng',min:0,max:5,st:0.1,u:' an'}];
+const BPRE=[['Bord de Dordogne',{zon:0,hum:0.8,contact:false,foret:5,semi:30,haies:10,esp:40,gest:0.5}],['Lisière de bois',{zon:0,hum:0,contact:true,foret:35,semi:45,haies:20,esp:55,gest:1}],['Friche ancienne',{zon:0.5,hum:0,contact:false,foret:10,semi:40,haies:30,esp:50,gest:3}],['Plateau viticole',{zon:0,hum:0,contact:false,foret:4,semi:12,haies:5,esp:30,gest:0.5}]];
+let BV={...BPRE[0][1]};
+function bioInit(){const bctl=document.getElementById('bctl');
+ bctl.innerHTML=BCTL.map(c=>c.t==='sel'?`<label class="ctl">${c.l}</label><select data-k="${c.k}" style="width:100%;padding:7px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:14px">${c.o.map(([t,v])=>`<option value="${v}">${t}</option>`).join('')}</select>`:c.t==='chk'?`<label class="ctl" style="display:flex;gap:8px;align-items:center;color:var(--ink)"><input type="checkbox" data-k="${c.k}"> ${c.l}</label>`:`<label class="ctl">${c.l} <b id="bl_${c.k}"></b></label><input type="range" data-k="${c.k}" min="${c.min}" max="${c.max}" step="${c.st}">`).join('');
+ bctl.querySelectorAll('[data-k]').forEach(el=>el.addEventListener('input',()=>{BV[el.dataset.k]=el.type==='checkbox'?el.checked:+el.value;bioCalc()}));
+ const bpre=document.getElementById('bpre');BPRE.forEach(([n,v],i)=>{const b=document.createElement('button');b.className='btn'+(i===0?' on':'');b.textContent=n;b.onclick=()=>{[...bpre.children].forEach(x=>x.classList.toggle('on',x===b));BV={...v};bioSync();bioCalc()};bpre.appendChild(b)});
+ BV={...BPRE[0][1]};bioSync();bioCalc()}
+function bioSync(){document.querySelectorAll('#bctl [data-k]').forEach(el=>{const v=BV[el.dataset.k];if(el.type==='checkbox')el.checked=v;else el.value=v})}
+function bioCalc(){const cl=x=>Math.max(0,Math.min(1,x));const C={zonages:BV.zon,humide:BV.hum,connectivite:BV.contact?cl(BV.foret/100/(0.2/0.6)):0,paysage:cl(BV.semi/100/0.6),heterogeneite:0.5,haies:cl(BV.haies/100),especes:BV.esp/100,succession:cl(BV.gest/3)};
+ BCTL.filter(c=>c.t==='rng').forEach(c=>{document.getElementById('bl_'+c.k).textContent=fr(BV[c.k],c.st<1?1:0)+c.u});
+ const idx=Object.entries(BW).reduce((a,[k,w])=>a+C[k]*w,0);document.getElementById('bidx').textContent=Math.round(idx)+' / 100';
+ let best=null;TYP.forEach(t=>{if(C[t[0]]>=t[3]&&(!best||C[t[0]]-t[3]>C[best[0]]-best[3]))best=t});
+ document.getElementById('benj').innerHTML=best?`<span class="pill" style="background:${best[2]};color:#fff;font-size:14px;padding:8px 12px">${best[1]}</span>`:`<span class="pill" style="background:#cfcac0;color:#1f1a15;font-size:14px;padding:8px 12px">Pas d'enjeu identifié</span>`;
+ document.getElementById('bcomp').innerHTML=TYP.map(([k,l,c,s])=>`<div class="row ${best&&best[0]===k?'hl':''}"><span class="lbl">${l}</span><span style="position:relative;height:14px;background:var(--line);border-radius:4px"><span style="position:absolute;left:0;top:0;bottom:0;width:${C[k]*100}%;background:${c};opacity:${C[k]>=s?1:.45};border-radius:4px"></span><span style="position:absolute;left:calc(${s*100}% - 1px);top:-3px;width:2px;height:20px;background:var(--ink)"></span></span><span class="mono" style="text-align:right">${fr(C[k],2)}</span></div>`).join('')}
+showRule(0);
+
+/* ---------- carte ---------- */
+const cv=document.getElementById('map'),ctx=cv.getContext('2d');
+const PAR=[],COM=[];let bbox=[1e9,1e9,-1e9,-1e9];
+function dec(rings){return rings.map(r=>{const o=[];let x=0,y=0;for(let i=0;i<r.length;i+=2){x+=r[i];y+=r[i+1];o.push(x,-y)}return o})}
+function mkPath(rs){const p=new Path2D();let b=[1e9,1e9,-1e9,-1e9];rs.forEach(r=>{p.moveTo(r[0],r[1]);for(let i=2;i<r.length;i+=2)p.lineTo(r[i],r[i+1]);p.closePath();for(let i=0;i<r.length;i+=2){b[0]=Math.min(b[0],r[i]);b[1]=Math.min(b[1],r[i+1]);b[2]=Math.max(b[2],r[i]);b[3]=Math.max(b[3],r[i+1])}});return [p,b]}
+D.P.forEach(r=>{const [id,dev,com,ha,an,enj,ie,pr,rk,rv,rings,resc]=r;const [p,b]=mkPath(dec(rings));PAR.push({id,dev,com:tx(com),ha,an,enj,ie,pr,rk,rv:tx(rv),resc,p,b});bbox=[Math.min(bbox[0],b[0]),Math.min(bbox[1],b[1]),Math.max(bbox[2],b[2]),Math.max(bbox[3],b[3])]});
+D.C.forEach(([n,rings])=>{const [p,b]=mkPath(dec(rings));COM.push({n,p,b})});
+const byId=new Map(PAR.map(o=>[o.id,o]));
+let V={s:1,tx:0,ty:0},layer='dev',hidden=new Set(),sel=null,dpr=1;
+function fit(b,pad=30){const w=cv.clientWidth,h=cv.clientHeight;const s=Math.min((w-2*pad)/(b[2]-b[0]),(h-2*pad)/(b[3]-b[1]));V.s=s;V.tx=w/2-s*(b[0]+b[2])/2;V.ty=h/2-s*(b[1]+b[3])/2}
+function resize(){dpr=window.devicePixelRatio||1;cv.width=cv.clientWidth*dpr;cv.height=cv.clientHeight*dpr}
+function colOf(o){
+ if(layer==='dev')return DEVCOL[o.dev];
+ if(o.dev<2)return null;
+ if(layer==='enj')return o.enj>=0?ENJCOL[o.enj]:'#cfcac0';
+ const t=Math.max(0,Math.min(1,(o.pr-30)/60));const a=[250,226,170],b=[150,22,60];return `rgb(${a.map((v,i)=>Math.round(v+(b[i]-v)*t)).join(',')})`}
+let raf=0;function redraw(){cancelAnimationFrame(raf);raf=requestAnimationFrame(draw)}
+function draw(){
+ ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cv.width,cv.height);
+ ctx.setTransform(dpr*V.s,0,0,dpr*V.s,dpr*V.tx,dpr*V.ty);
+ const lw=1/V.s;ctx.lineJoin='round';
+ ctx.strokeStyle=css('--line');ctx.lineWidth=lw*1.2;COM.forEach(c=>ctx.stroke(c.p));
+ for(const o of PAR){if(hidden.has(layer==='dev'?o.dev:(o.dev<2?'v':(layer==='enj'?o.enj:'a'))))continue;
+  let c=colOf(o);if(!c){ctx.fillStyle=css('--line');ctx.globalAlpha=.9}else{ctx.fillStyle=c;ctx.globalAlpha=1}
+  ctx.fill(o.p);ctx.globalAlpha=.6;ctx.strokeStyle=c||css('--muted');ctx.lineWidth=lw*(V.s>0.25?.6:1.1);ctx.stroke(o.p)}
+ ctx.globalAlpha=1;
+ if(sel){ctx.strokeStyle=css('--ink');ctx.lineWidth=lw*3;ctx.stroke(sel.p);ctx.strokeStyle='#fff';ctx.lineWidth=lw*1.2;ctx.stroke(sel.p)}
+ if(V.s>0.12){ctx.setTransform(dpr,0,0,dpr,0,0);ctx.font='600 11px Inter, sans-serif';ctx.fillStyle=css('--muted');ctx.textAlign='center';
+  COM.forEach(c=>{const x=V.tx+V.s*(c.b[0]+c.b[2])/2,y=V.ty+V.s*(c.b[1]+c.b[3])/2;if(x>0&&y>0&&x<cv.clientWidth&&y<cv.clientHeight)ctx.fillText(c.n,x,y)})}
+}
+function legend(){
+ const el=document.getElementById('mleg');let items;
+ if(layer==='dev')items=DEVS.map((l,i)=>[i,`${l} · ${fr(dh[i])} ha`,DEVCOL[i]]);
+ else if(layer==='enj')items=D.ENJ.map((l,i)=>[i,l,ENJCOL[i]]).concat([['v','Vignes en place',css('--line')]]);
+ else items=[['a','Score de priorité : clair = faible, foncé = élevé','linear-gradient(90deg,rgb(250,226,170),rgb(150,22,60))'],['v','Vignes en place',css('--line')]];
+ el.innerHTML=items.map(([k,l,c])=>`<button data-k="${k}" class="${hidden.has(isNaN(k)?k:+k)?'off':''}"><i style="background:${c}"></i>${l}</button>`).join('');
+ el.querySelectorAll('button').forEach(b=>b.onclick=()=>{const k=isNaN(b.dataset.k)?b.dataset.k:+b.dataset.k;hidden.has(k)?hidden.delete(k):hidden.add(k);legend();redraw()});
+}
+document.querySelectorAll('#layers .btn').forEach(b=>b.onclick=()=>{document.querySelectorAll('#layers .btn').forEach(x=>x.classList.toggle('on',x===b));layer=b.dataset.l;hidden=new Set();legend();redraw()});
+let drag=null,moved=false;const pts=new Map();
+cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);pts.set(e.pointerId,[e.offsetX,e.offsetY]);drag={x:e.offsetX,y:e.offsetY,tx:V.tx,ty:V.ty};moved=false;cv.classList.add('drag')});
+cv.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;const prev=pts.get(e.pointerId);pts.set(e.pointerId,[e.offsetX,e.offsetY]);
+ if(pts.size===2){const [a,b]=[...pts.values()];const ks=[...pts.keys()];const pa=e.pointerId===ks[0]?prev:a,pb=e.pointerId===ks[1]?prev:b;const d0=Math.hypot(pa[0]-pb[0],pa[1]-pb[1]),d1=Math.hypot(a[0]-b[0],a[1]-b[1]);if(d0>0)zoomAt((a[0]+b[0])/2,(a[1]+b[1])/2,d1/d0);moved=true;return}
+ if(drag){const dx=e.offsetX-drag.x,dy=e.offsetY-drag.y;if(Math.abs(dx)+Math.abs(dy)>3)moved=true;V.tx=drag.tx+dx;V.ty=drag.ty+dy;redraw()}});
+const up=e=>{pts.delete(e.pointerId);cv.classList.remove('drag');if(pts.size===0){if(!moved&&drag)pick(e.offsetX,e.offsetY);drag=null}else{const [p]=pts.values();drag={x:p[0],y:p[1],tx:V.tx,ty:V.ty}}};
+cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+cv.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.offsetX,e.offsetY,Math.exp(-e.deltaY*0.0015))},{passive:false});
+function zoomAt(x,y,f){const s=Math.max(0.005,Math.min(8,V.s*f));f=s/V.s;V.tx=x-(x-V.tx)*f;V.ty=y-(y-V.ty)*f;V.s=s;redraw()}
+document.getElementById('zin').onclick=()=>zoomAt(cv.clientWidth/2,cv.clientHeight/2,1.6);
+document.getElementById('zout').onclick=()=>zoomAt(cv.clientWidth/2,cv.clientHeight/2,1/1.6);
+document.getElementById('zfit').onclick=()=>{fit(bbox);redraw()};
+function pick(px,py){const wx=(px-V.tx)/V.s,wy=(py-V.ty)/V.s;let best=null;
+ for(const o of PAR){if(wx<o.b[0]||wx>o.b[2]||wy<o.b[1]||wy>o.b[3])continue;if(ctx.isPointInPath(o.p,wx*dpr*V.s+dpr*V.tx,wy*dpr*V.s+dpr*V.ty)){best=o;break}}
+ if(!best){const tol=6/V.s;let dmin=1e9;for(const o of PAR){const cx=(o.b[0]+o.b[2])/2,cy=(o.b[1]+o.b[3])/2,d=Math.hypot(cx-wx,cy-wy);if(d<dmin&&d<tol+Math.max(o.b[2]-o.b[0],o.b[3]-o.b[1])/2){dmin=d;best=o}}}
+ if(best)showFiche(best.id)}
+const PRIOLIB=[['Grande surface','#5550c0'],['Enjeu écologique','#1d9873'],['Années sans gestion','#b8761a'],['Regroupable','#d6527a']];
+function showFiche(id,zoom){const o=byId.get(id),f=D.F[id];sel=o;
+ if(zoom){const b=o.b,w=Math.max(b[2]-b[0],b[3]-b[1]);fit([b[0]-w*3,b[1]-w*3,b[2]+w*3,b[3]+w*3],20)}
+ redraw();const el=document.getElementById('fiche');const arr=o.dev>=2;
+ let h=`<span class="pill" style="background:${DEVCOL[o.dev]};color:#fff">${DEVS[o.dev]}</span><h3 style="margin-top:10px">Parcelle n°${o.id}</h3><p class="small muted" style="margin:0">${esc(tx(f[10]).replace(/;/g,', '))}</p>`;
+ h+=`<div class="kv"><b>Surface</b><span>${fr(o.ha,1)} ha</span><b>Vigne déclarée</b><span>jusqu'en ${o.an}</span><b>Statut détaillé</b><span>${esc(tx(f[16]))}</span>`;
+ if(o.rv)h+=`<b>Rangs en mai 2024</b><span>${o.rv==='oui'?'oui, vigne vue sur l\'orthophoto':o.rv==='non'?'non':esc(o.rv)}${o.resc?' (repassée en vigne grâce aux rangs)':''}</span>`;
+ if(f[5]>=0)h+=`<b>Zone PLU</b><span>${esc(tx(f[5]))}</span>`;
+ if(f[6]!=null)h+=`<b>Pente</b><span>${fr(f[6],1)} %</span>`;
+ if(f[7]!=null)h+=`<b>Sans gestion</b><span>${fr(f[7],1)} an(s)</span>`;
+ if(f[12]!=null)h+=`<b>Cours d'eau</b><span>à ${fr(f[12])} m</span>`;
+ h+=`</div>`;
+ if(!arr){h+=`<div class="callout" style="margin:8px 0"><p class="small">Toujours en vigne&nbsp;: pas de projet à monter ici. C'est une des fausses pistes que l'outil écarte.</p></div>`}
+ else{
+  h+=`<p class="small" style="margin:10px 0 4px"><b>Enjeu principal&nbsp;:</b> ${o.enj>=0?D.ENJ[o.enj]:'non calculé'} · indice écologique ${o.ie>=0?o.ie+'/100':'n.d.'}</p>`;
+  if(f[3]>=0)h+=`<p class="small muted" style="margin:0 0 8px">${esc(tx(f[3]))}</p>`;
+  if(o.pr>=0){h+=`<p class="small" style="margin:10px 0 0"><b>Priorité&nbsp;:</b> ${o.pr}/100, rang ${fr(o.rk)} sur ${fr(F.n_arr)}</p><div class="prio">${f[8].map((v,i)=>`<i title="${PRIOLIB[i][0]} : ${fr(v,1)}" style="width:${v}%;background:${PRIOLIB[i][1]}"></i>`).join('')}</div><div class="legend" style="margin-top:2px">${PRIOLIB.map(([l,c],i)=>`<span><i style="background:${c}"></i>${l} ${fr(f[8][i],0)}</span>`).join('')}</div>`}
+  h+=`<h3 style="font-size:17px;margin-top:16px">Projets possibles</h3><div class="proj">${D.FAM.map((k,i)=>`<div class="p"><div class="hd"><span>${FAMLIB[k]}</span><span class="niv n${f[0][i]}">${f[0][i]>=0?D.NIV[f[0][i]]:'n.d.'}</span></div><div class="muted">${esc(tx(f[1][i]))}</div></div>`).join('')}</div>`;
+  if(f[4]>=0)h+=`<p class="small"><b>Bilan&nbsp;:</b> ${esc(tx(f[4]))}</p>`;
+  if(f[2]>=0)h+=`<p class="small"><b>Vigilance&nbsp;:</b> ${esc(tx(f[2]))}</p>`;
+  if(f[13]>=0)h+=`<p class="small"><b>Sol&nbsp;:</b> ${esc(tx(f[13]))}</p>`;
+  if(f[9]>=0)h+=`<p class="small muted"><b>Analyses conseillées&nbsp;:</b> ${esc(tx(f[9]))}</p>`;
+ }
+ h+=`<p class="small"><a href="https://www.geoportail.gouv.fr/carte?c=${f[15]},${f[14]}&z=17&l0=ORTHOIMAGERY.ORTHOPHOTOS::GEOPORTAIL:OGC:WMTS(1)&permalink=yes" target="_blank" rel="noopener">Voir sur le Géoportail (orthophoto IGN)</a></p>`;
+ el.innerHTML=h}
+function ficheVide(){document.getElementById('fiche').innerHTML=`<span class="eyebrow">Fiche parcelle</span><h3 style="margin-top:10px">Clique sur une parcelle</h3><p class="small muted">Ou cherche une commune, ou choisis une parcelle dans le top 20.</p><p class="small">La couleur indique ce que la parcelle est devenue. Les vignes encore en place (en violet) sont les fausses pistes que la PAC seule aurait gardées.</p>`}
+const comStats={};PAR.forEach(o=>{if(!o.com)return;const c=comStats[o.com]||(comStats[o.com]={n:0,ha:0,arr:0,vig:0,b:[1e9,1e9,-1e9,-1e9],enj:{},best:null});c.n++;c.ha+=o.ha;if(o.dev>=2){c.arr+=o.ha;if(o.enj>=0)c.enj[o.enj]=(c.enj[o.enj]||0)+o.ha;if(!c.best||o.pr>c.best.pr)c.best=o}else c.vig+=o.ha;c.b=[Math.min(c.b[0],o.b[0]),Math.min(c.b[1],o.b[1]),Math.max(c.b[2],o.b[2]),Math.max(c.b[3],o.b[3])]});
+document.getElementById('communes').innerHTML=Object.keys(comStats).sort((a,b)=>a.localeCompare(b,'fr')).map(n=>`<option value="${esc(n)}">`).join('');
+const norm=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z]/g,'');
+document.getElementById('q').addEventListener('change',e=>{const v=norm(e.target.value);if(!v)return;const n=Object.keys(comStats).find(k=>norm(k)===v)||Object.keys(comStats).find(k=>norm(k).startsWith(v));if(!n)return;const c=comStats[n];fit(c.b,40);sel=null;redraw();
+ const top=Object.entries(c.enj).sort((a,b)=>b[1]-a[1])[0];
+ document.getElementById('fiche').innerHTML=`<span class="eyebrow">Commune</span><h3 style="margin-top:10px">${esc(n)}</h3><div class="kv"><b>Sorties de la vigne</b><span>${fr(c.ha)} ha, ${c.n} parcelles</span><b>Toujours en vigne</b><span>${fr(c.vig)} ha</span><b>Vraiment arrachées</b><span>${fr(c.arr)} ha</span><b>Enjeu dominant</b><span>${top?D.ENJ[top[0]]:'n.d.'}</span></div>${c.best?`<button class="btn" id="cbest">Voir sa parcelle la plus prioritaire (${c.best.pr}/100)</button>`:''}`;
+ if(c.best)document.getElementById('cbest').onclick=()=>showFiche(c.best.id,true)});
+document.getElementById('toplst').innerHTML=D.top.map(id=>{const o=byId.get(id);return `<button data-id="${id}"><span class="rk">${o.rk}</span><span><b>n°${id}</b> · ${esc(o.com)} · ${fr(o.ha,1)} ha<br><span class="muted xs">${DEVS[o.dev]} · ${o.enj>=0?D.ENJ[o.enj]:''}</span></span><span class="mono" style="text-align:right">${o.pr}/100</span></button>`}).join('');
+document.querySelectorAll('#toplst button').forEach(b=>b.onclick=()=>{document.getElementById('carte').scrollIntoView();setTimeout(()=>showFiche(+b.dataset.id,true),400)});
+
+/* ---------- démo FFT (même calcul que le script) ---------- */
+const RG=(()=>{const N=256,RES=0.25;function rng(s){s>>>=0;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296}}function gauss(r){let u=0;while(u===0)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r())}
+function blur(a,sig){const rad=Math.ceil(3*sig),k=new Float32Array(2*rad+1);let s=0;for(let i=-rad;i<=rad;i++){k[i+rad]=Math.exp(-i*i/(2*sig*sig));s+=k[i+rad]}for(let i=0;i<k.length;i++)k[i]/=s;const t=new Float32Array(N*N),o=new Float32Array(N*N);const rf=i=>{while(i<0||i>=N){if(i<0)i=-i-1;if(i>=N)i=2*N-i-1}return i};for(let y=0;y<N;y++)for(let x=0;x<N;x++){let v=0;for(let j=-rad;j<=rad;j++)v+=a[y*N+rf(x+j)]*k[j+rad];t[y*N+x]=v}for(let y=0;y<N;y++)for(let x=0;x<N;x++){let v=0;for(let j=-rad;j<=rad;j++)v+=t[rf(y+j)*N+x]*k[j+rad];o[y*N+x]=v}return o}
+const cache={};function bb(seed,e){const key=seed+'_'+e;if(cache[key])return cache[key];const r=rng(seed*31+e),a=new Float32Array(N*N);for(let i=0;i<a.length;i++)a[i]=gauss(r);const b=blur(a,e);let m=0;for(const v of b)m=Math.max(m,Math.abs(v));for(let i=0;i<b.length;i++)b[i]/=(m||1);return cache[key]=b}
+function scene(p){const seed=7,r=rng(seed),a=new Float32Array(N*N),th=p.angle*Math.PI/180,c=Math.cos(th),s=Math.sin(th),lf=bb(seed,20),mf=bb(seed,3);
+for(let y=0;y<N;y++)for(let x=0;x<N;x++){const X=x*RES,Y=y*RES,i=y*N+x;let v;
+if(p.type==='vigne'){const u=X*c+Y*s+0.9*lf[i]*p.periode,w=-X*s+Y*c,ph=((u%p.periode)+p.periode)%p.periode/p.periode,rang=Math.floor(u/p.periode),seg=Math.floor(w/1.1),h=Math.abs(Math.sin(rang*12.9898+seg*78.233)*43758.5453)%1,larg=Math.min(0.9,0.42*p.periode)*(0.7+0.6*Math.abs(mf[i]))/p.periode,feuil=(Math.abs(ph-0.5)<larg/2&&h>0.22)?1:0,cep=0.6+0.4*Math.abs(mf[(i+37)%(N*N)]),inter=0.62+0.10*p.herbe*mf[i]-0.18*p.herbe;v=feuil?inter-0.32*p.contraste*cep:inter;v+=0.06*lf[i]}
+else if(p.type==='prairie')v=0.5+0.12*lf[i]+0.07*mf[i];else if(p.type==='friche')v=0.52+0.08*lf[i]+0.05*mf[i];
+else{const u=X*c+Y*s,w=-X*s+Y*c;v=0.66+0.05*Math.sin(2*Math.PI*u/0.55+2*mf[i])+0.08*lf[i]+0.05*mf[i];const d=Math.abs(w-30);if(Math.abs(d-0.75)<0.25)v-=0.06*p.contraste}a[i]=v}
+if(p.type==='friche'){for(let k=0;k<70;k++){const cx=r()*N,cy=r()*N,rr=(0.6+2.2*r())/RES;for(let y=Math.max(0,cy-rr|0);y<Math.min(N,cy+rr+1);y++)for(let x=Math.max(0,cx-rr|0);x<Math.min(N,cx+rr+1);x++){const d=Math.hypot(x-cx,y-cy)/rr;if(d<1)a[y*N+x]=Math.min(a[y*N+x],0.24+0.12*d)}}}
+const rb=rng(seed+99);for(let i=0;i<a.length;i++)a[i]=Math.max(0,Math.min(1,a[i]+p.bruit*0.12*gauss(rb)));return a}
+function fft1(re,im,n){for(let i=1,j=0;i<n;i++){let bit=n>>1;for(;j&bit;bit>>=1)j^=bit;j^=bit;if(i<j){let t=re[i];re[i]=re[j];re[j]=t;t=im[i];im[i]=im[j];im[j]=t}}for(let len=2;len<=n;len<<=1){const ang=-2*Math.PI/len,wr=Math.cos(ang),wi=Math.sin(ang),hl=len/2;for(let i=0;i<n;i+=len){let cr=1,ci=0;for(let j=0;j<hl;j++){const ar=re[i+j+hl],ai=im[i+j+hl],tr=ar*cr-ai*ci,ti=ar*ci+ai*cr;re[i+j+hl]=re[i+j]-tr;im[i+j+hl]=im[i+j]-ti;re[i+j]+=tr;im[i+j]+=ti;const nr=cr*wr-ci*wi;ci=cr*wi+ci*wr;cr=nr}}}}
+const hp=(()=>{const m=new Float32Array(N*N),e=Math.round(2/RES);for(let y=0;y<N;y++)for(let x=0;x<N;x++)m[y*N+x]=(x>=e&&y>=e&&x<N-e&&y<N-e)?1:0;return blur(m,1.5/RES)})();
+function score(img){const g=blur(img,6/RES),a=new Float32Array(N*N);for(let i=0;i<a.length;i++)a[i]=img[i]-g[i];let mu=0;for(const v of a)mu+=v;mu/=a.length;let s=0,s2=0,n=0;for(let i=0;i<a.length;i++){a[i]=(a[i]-mu)*hp[i];if(hp[i]>0.5){s+=a[i];s2+=a[i]*a[i];n++}}const sd=Math.sqrt(Math.max(0,s2/n-(s/n)**2))+1e-6,han=i=>0.5-0.5*Math.cos(2*Math.PI*i/(N-1)),re=new Float64Array(N*N),im=new Float64Array(N*N);
+for(let y=0;y<N;y++)for(let x=0;x<N;x++)re[y*N+x]=a[y*N+x]/sd*han(y)*han(x);const rr=new Float64Array(N),ii=new Float64Array(N);
+for(let y=0;y<N;y++){for(let x=0;x<N;x++){rr[x]=re[y*N+x];ii[x]=im[y*N+x]}fft1(rr,ii,N);for(let x=0;x<N;x++){re[y*N+x]=rr[x];im[y*N+x]=ii[x]}}for(let x=0;x<N;x++){for(let y=0;y<N;y++){rr[y]=re[y*N+x];ii[y]=im[y*N+x]}fft1(rr,ii,N);for(let y=0;y<N;y++){re[y*N+x]=rr[y];im[y*N+x]=ii[y]}}
+const P0=new Float64Array(N*N),h=N/2;for(let y=0;y<N;y++)for(let x=0;x<N;x++){P0[((y+h)%N)*N+(x+h)%N]=re[y*N+x]**2+im[y*N+x]**2}const P=new Float64Array(N*N);for(let y=0;y<N;y++)for(let x=0;x<N;x++){let v=0;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)v+=P0[Math.min(N-1,Math.max(0,y+dy))*N+Math.min(N-1,Math.max(0,x+dx))];P[y*N+x]=v/9}
+const df=1/(N*RES);let best=-1,bi=-1;const Fq=i=>Math.hypot(((i%N)-h)*df,(Math.floor(i/N)-h)*df),Tt=i=>{let t=Math.atan2((Math.floor(i/N)-h)*df,((i%N)-h)*df)*180/Math.PI;return((t%180)+180)%180};
+for(let i=0;i<N*N;i++){const f=Fq(i);if(f>=0.25&&f<=1&&P[i]>best){best=P[i];bi=i}}const f0=Fq(bi),t0=Tt(bi),bas=[],haut=[];
+for(let i=0;i<N*N;i++){const dt=Math.abs(((Tt(i)-t0+90)%180+180)%180-90);if(dt>6)continue;const f=Fq(i);if(f>=0.55*f0&&f<=0.8*f0)bas.push(P[i]);else if(f>=1.25*f0&&f<=1.6*f0)haut.push(P[i])}
+const med=v=>{v.sort((x,y)=>x-y);const k=v.length>>1;return v.length%2?v[k]:(v[k-1]+v[k])/2};let sc=NaN;if(bas.length>=3&&haut.length>=3)sc=best/Math.sqrt(med(bas)*med(haut));return{score:sc,periode:1/f0,angle:t0,P,peak:bi}}
+return{N,RES,scene,score}})();
+const PRESETS=[['Vigne en place',{type:'vigne',periode:2.0,angle:30,contraste:1,bruit:0.5,herbe:0.5}],['Vigne enherbée',{type:'vigne',periode:2.0,angle:30,contraste:0.35,bruit:1,herbe:1}],['Vigne abandonnée',{type:'vigne',periode:2.2,angle:120,contraste:0.2,bruit:1.5,herbe:1}],['Prairie',{type:'prairie',periode:2,angle:30,contraste:1,bruit:0.5,herbe:0.5}],['Friche',{type:'friche',periode:2,angle:30,contraste:1,bruit:0.5,herbe:0.5}],['Sol travaillé',{type:'sol',periode:2,angle:30,contraste:1,bruit:0.5,herbe:0.5}]];
+let RP={...PRESETS[0][1]},rtm=null,lastR=null,lastImg=null;const pre=document.getElementById('presets');
+PRESETS.forEach(([n,p],i)=>{const b=document.createElement('button');b.className='btn'+(i===0?' on':'');b.textContent=n;b.onclick=()=>{[...pre.children].forEach(x=>x.classList.toggle('on',x===b));RP={...p};sync();runR()};pre.appendChild(b)});
+const ctlm={rp:'periode',ra:'angle',rc:'contraste',rb:'bruit'};
+function sync(){for(const[id,k]of Object.entries(ctlm))document.getElementById(id).value=RP[k];lab()}
+function lab(){document.getElementById('lp').textContent=fr(RP.periode,1)+' m';document.getElementById('la').textContent=RP.angle+'°';document.getElementById('lc').textContent=fr(RP.contraste,2);document.getElementById('lb').textContent=fr(RP.bruit,1);['rp','rc'].forEach(id=>document.getElementById(id).disabled=RP.type!=='vigne')}
+for(const[id,k]of Object.entries(ctlm))document.getElementById(id).addEventListener('input',e=>{RP[k]=+e.target.value;lab();clearTimeout(rtm);rtm=setTimeout(runR,60)});
+function cmap(t){const st=[[0,0,4],[59,15,112],[140,41,129],[222,73,104],[254,159,109],[252,253,191]];t=Math.max(0,Math.min(1,t))*(st.length-1);const i=Math.min(st.length-2,Math.floor(t)),f=t-i;return st[i].map((v,k)=>v+(st[i+1][k]-v)*f)}
+function runR(){const img=RG.scene(RP),r=RG.score(img);lastR=r;lastImg=img;drawR();const ok=r.score>=21;document.getElementById('sval').textContent=isNaN(r.score)?'n.d.':fr(r.score,r.score<100?1:0);const vd=document.getElementById('sverd');vd.className='verdict '+(ok?'ok':'no');vd.textContent=ok?'21 ou plus : rangs détectés':'moins de 21 : pas de rangs';document.getElementById('sinfo').innerHTML=ok?`Pic à <b>${fr(r.periode,2)} m</b> d'écartement.`:'Aucun motif régulier.'}
+function drawR(){const r=lastR,img=lastImg,N=RG.N;if(!r)return;const c1=document.getElementById('cimg').getContext('2d'),id=c1.createImageData(N,N),lo=[47,74,34],hi=[219,203,160];for(let i=0;i<N*N;i++){const v=img[i];id.data[4*i]=lo[0]+(hi[0]-lo[0])*v;id.data[4*i+1]=lo[1]+(hi[1]-lo[1])*v;id.data[4*i+2]=lo[2]+(hi[2]-lo[2])*v;id.data[4*i+3]=255}c1.putImageData(id,0,0);
+const c2=document.getElementById('cfft').getContext('2d'),W=256,h=N/2,Z=80,id2=c2.createImageData(W,W);let mx=-1e9;const L=new Float64Array(N*N);for(let i=0;i<N*N;i++)L[i]=Math.log10(r.P[i]+1e-9);for(let y=h-Z;y<h+Z;y++)for(let x=h-Z;x<h+Z;x++)mx=Math.max(mx,L[y*N+x]);const mn=mx-5;
+for(let py=0;py<W;py++)for(let px=0;px<W;px++){const x=Math.floor(h-Z+px*2*Z/W),y=Math.floor(h-Z+py*2*Z/W),c=cmap((L[y*N+x]-mn)/(mx-mn)),k=4*(py*W+px);id2.data[k]=c[0];id2.data[k+1]=c[1];id2.data[k+2]=c[2];id2.data[k+3]=255}c2.putImageData(id2,0,0);
+const sc=W/(2*Z),df=1/(N*RG.RES);c2.strokeStyle='rgba(255,255,255,.75)';c2.setLineDash([4,4]);c2.lineWidth=1.5;[0.25,1].forEach(f=>{c2.beginPath();c2.arc(W/2,W/2,f/df*sc,0,2*Math.PI);c2.stroke()});c2.setLineDash([]);
+if(r.score>=21){const px=(r.peak%N-(h-Z))*sc,py=(Math.floor(r.peak/N)-(h-Z))*sc;c2.strokeStyle='#3cf0b4';c2.lineWidth=2.5;c2.beginPath();c2.arc(px,py,7,0,2*Math.PI);c2.stroke()}}
+sync();
+let demoDone=false;const runOnce=()=>{if(demoDone)return;demoDone=true;runR()};const demoIO=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){demoIO.disconnect();setTimeout(runOnce,50)}},{rootMargin:'300px'});demoIO.observe(document.getElementById('demo'));setTimeout(runOnce,6000);
+
+/* ---------- init ---------- */
+legend();ficheVide();
+function initMap(){resize();fit(bbox);draw()}
+initMap();window.addEventListener('resize',()=>{const b=[(-V.tx)/V.s,(-V.ty)/V.s,(cv.clientWidth-V.tx)/V.s,(cv.clientHeight-V.ty)/V.s];resize();fit(b,0);redraw()});
+</script>
+</body>
+</html>
